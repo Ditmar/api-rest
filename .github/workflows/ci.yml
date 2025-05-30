@@ -23,10 +23,6 @@ jobs:
       ## test version
       - name : Test get version
         run: node ./scripts/get-version.js >> $GITHUB_ENV
-      ## print version 
-      - name: Print version
-        run: echo "Version: ${{ env.VERSION }}"
-      ## test the project
       ## get commit hash
       - name: Get short commit hash
         id: get_commit_hash
@@ -43,4 +39,7 @@ jobs:
       ## push the docker image
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/api:${{ env.GIT_COMMIT_HASH }}
+      ## print version 
+      - name: Print version
+        run: echo "${{ env.VERSION }}"
         
