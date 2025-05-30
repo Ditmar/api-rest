@@ -35,10 +35,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       ## build the docker image
       - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/api:${{ env.GIT_COMMIT_HASH }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }} .
       ## push the docker image
       - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/api:${{ env.GIT_COMMIT_HASH }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }}
       ## print version 
       - name: Print version
         run: echo "${{ env.VERSION }}"
