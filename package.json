@@ -1,6 +1,6 @@
 {
   "name": "api-rest",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.1",
   "description": "",
   "scripts": {
     "build": "tsc",
@@ -13,6 +13,9 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
