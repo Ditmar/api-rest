@@ -20,6 +20,11 @@ jobs:
       ## build the project
       - name: Build the project
         run: yarn build
+      ## test version
+      - name : Test get version
+        run: node ./scripts/get-version.js >> $GITHUB_ENV
+        run: echo ${{ env.GIT_COMMIT_HASH }}
+      ## test the project
       ## get commit hash
       - name: Get short commit hash
         id: get_commit_hash
