@@ -1,0 +1,41 @@
+name: Build and Publish Docker Images
+on:
+  push:
+    branches:
+      - '**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          node-version: '20'
+      ## install yarn
+      - name: Install Yarn
+        run: npm install -g yarn
+      ## install dependencies
+      - name: Install dependencies
+        run: yarn install
+      ## build the project
+      - name: Build the project
+        run: yarn build
+      ## get verison 
+      - name : Get version
+        run: node ./scripts/get-version.js >> $GITHUB_ENV
+      ## init docker hub session
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      ## build the docker image
+      - name: Build Docker Image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }} .
+      ## push the docker image
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }}
+      ## print version 
+      - name: Info log version
+        run: echo "${{ env.VERSION }}"
+        
