@@ -1,10 +1,9 @@
 import express from 'express';
-import dotenv from 'dotenv';
+import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 console.log('Development mode');
-dotenv.config();
 
 
 const server =  express();
@@ -33,6 +32,6 @@ class App {
     }
 }
 new App();
-server.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+server.listen(ConfigSingleton.getInstance().PORT, () => {
+    console.log(`Server is running on port ${ConfigSingleton.getInstance().PORT}`);
 });

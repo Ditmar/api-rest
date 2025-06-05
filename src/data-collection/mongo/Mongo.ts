@@ -1,10 +1,8 @@
 import { BaseCollection } from "../base-collection/baseCollection";
-
+import { MongoClient } from './mongo-client'
 class Mongo extends BaseCollection {
     get(): Promise<unknown> {
-        return new Promise((resolve) => {
-            resolve([{data: "MongoDB"}, {data: "MongoDB"}])
-        });
+        return MongoClient.getInstance().db().collection().find();
     }
     post(body: unknown): Promise<unknown> {
         throw new Error("Method not implemented.");
