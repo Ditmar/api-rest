@@ -8,7 +8,8 @@
     "dev": "nodemon",
     "lint": "eslint src/**/*.ts",
     "db:start:local": "docker-compose -f ./dev-database/dev-database.yml up -d",
-    "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up"
+    "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +17,8 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongodb": "^6.16.0",
-    "zod": "^3.24.4"
+    "zod": "^3.24.4",
+    "mongoose": "^8.15.1"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -24,10 +26,14 @@
   "devDependencies": {
     "@eslint/js": "^9.26.0",
     "@types/express": "^5.0.1",
+    "@types/jest": "^29.5.14",
     "eslint": "^9.26.0",
     "globals": "^16.1.0",
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.10",
-    "tsc": "^2.0.4",
+    "ts-jest": "^29.3.4",
+    "tsc": "^2.0.4",  
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0"
   }
