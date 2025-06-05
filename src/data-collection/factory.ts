@@ -1,4 +1,5 @@
 import { Mongo } from './mongo/Mongo';
+import { MongoProvider } from '../data/providers/MongoProvider';
 import { Postgres } from './postgress/Postgres';
 import { PokeApi  } from './api/PokeApi';
 import { BaseCollection } from './base-collection/baseCollection';
@@ -6,7 +7,7 @@ class DataCollectionFactory {
   static createDataCollection(type: string): BaseCollection {
     switch (type) {
         case 'mongo':
-            return new Mongo();
+            return new MongoProvider();
         case 'postgres':
             return new Postgres();
         case 'api':
