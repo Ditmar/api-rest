@@ -12,26 +12,26 @@ console.log('Development mode');
 const server = express();
 
 class App {
-  private dataCollection: BaseCollection | null = null;
+    private dataCollection: BaseCollection | null = null;
+    constructor() {
+        this.initializeMiddlewares();
+        this.initCollections();
+        this.initializeRoutes();
+    }
 
-  constructor() {
-    this.initializeMiddlewares();
-    this.initCollections();
-    this.initializeRoutes();
-  }
+    private initCollections() {
+       this.dataCollection =  DataCollectionFactory.createDataCollection('api');
+    }
+    private initializeMiddlewares() {
+        server.use(express.json());
+        server.use(express.urlencoded({ extended: true }));
+    }
 
-  private initCollections() {
-    this.dataCollection = DataCollectionFactory.createDataCollection('index'); // o 'mongo' o lo que uses
-  }
-
-  private initializeMiddlewares() {
-    server.use(express.json());
-    server.use(express.urlencoded({ extended: true }));
-  }
-
-  private initializeRoutes() {
-    if (!this.dataCollection) {
-      throw new Error('Data collection is not initialized');
+    private initializeRoutes() {
+        if (!this.dataCollection) {
+            throw new Error('Data collection is not initialized');
+        }
+        server.use('/user', userWrapper(this.dataCollection));
     }
     server.use('/user', userWrapper(this.dataCollection));
     server.use('/year', yearWrapper(new YearCollection()));
