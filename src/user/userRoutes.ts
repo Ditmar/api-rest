@@ -3,12 +3,13 @@ import { userController } from './controller';
 import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 
 const userWrapper = (dataCollection: BaseCollection) => {
-    const { get, post, deleteUser, put } = userController(dataCollection);
+    const { getUserById, createUser, deleteUser, updateUser, getUsers } = userController(dataCollection);
     const userRouter = Router();
-    userRouter.get('/', get);
-    userRouter.post('/', post);
-    userRouter.delete('/', deleteUser)
-    userRouter.put('/', put);
+    userRouter.get('/:id', getUserById);
+    userRouter.post('/', createUser);
+    userRouter.delete('/:id', deleteUser);
+    userRouter.put('/:id', updateUser);
+    userRouter.get('/', getUsers);
     return userRouter
 }
 
