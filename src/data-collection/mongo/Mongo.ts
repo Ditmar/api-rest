@@ -10,31 +10,29 @@ class Mongo extends BaseCollection {
     //     });
     // }
 
-    async get(id?:string):Promise<unknown>{
-        try {
-            if(id){
-                if(!id.match(/^[0-9a-fA-F]{24}$/)) {
-                    throw new ErrorHandler(HttpStatus.BAD_REQUEST, 'Invalid user ID format');
-                }
-                const user = await UserModel.findById(id).select('-password');
-                if(!user) {
-                    throw new ErrorHandler(HttpStatus.NOT_FOUND, 'User not found');
-                }
-                return user;
+    async get(id?: string): Promise<unknown> {
+
+        if (id) {
+            if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+                throw new ErrorHandler(HttpStatus.BAD_REQUEST, 'Invalid user ID format');
             }
-            return await UserModel.find().select('-password');
-        } catch (error) {
-            throw error;
+            const user = await UserModel.findById(id).select('-password');
+            if (!user) {
+                throw new ErrorHandler(HttpStatus.NOT_FOUND, 'User not found');
+            }
+            return user;
         }
+        return await UserModel.find().select('-password');
+
     }
-    
+
     async post(body: unknown): Promise<unknown> {
         const { nombre, email, password } = body as { nombre: string; email: string; password: string };
-        const existingUser = await UserModel.findOne({email});
+        const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
             throw new ErrorHandler(HttpStatus.BAD_REQUEST, 'User already exists');
         }
-        const newUser = new UserModel({nombre, email, password});
+        const newUser = new UserModel({ nombre, email, password });
         await newUser.save();
         return newUser;
     }
@@ -44,9 +42,9 @@ class Mongo extends BaseCollection {
         if (!deletedUser) {
             throw new ErrorHandler(HttpStatus.NOT_FOUND, 'User not found');
         }
-        return { message:'User deleted successfully' };
+        return { message: 'User deleted successfully' };
     }
-    async put(id:string, body: unknown): Promise<unknown> {
+    async put(id: string, body: unknown): Promise<unknown> {
         try {
             const { nombre, email, password } = body as { nombre: string; email: string; password: string };
             const user = await UserModel.findById(id);
@@ -54,7 +52,7 @@ class Mongo extends BaseCollection {
                 throw new ErrorHandler(HttpStatus.NOT_FOUND, 'User not found');
             }
 
-            if(email && email !== user.email) {
+            if (email && email !== user.email) {
                 const existingUser = await UserModel.findOne({ email });
                 if (existingUser) {
                     throw new ErrorHandler(HttpStatus.BAD_REQUEST, 'Email already in use');
@@ -63,7 +61,10 @@ class Mongo extends BaseCollection {
 
             return UserModel.findByIdAndUpdate(id, { nombre, email, password }, { new: true }).select('-password');
         } catch (error) {
-            
+            if (error instanceof ErrorHandler) {
+                throw error;
+            }
+            throw new ErrorHandler(HttpStatus.INTERNAL_SERVER_ERROR, 'Error updating user');
         }
     }
 }

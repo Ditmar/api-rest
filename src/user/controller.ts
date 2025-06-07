@@ -30,7 +30,6 @@ const userController = (dataCollection: BaseCollection) => {
 
     const createUser = async (request: Request, response: Response) => {
         try {
-            console.log(request.body)
             const newUser = await dataCollection.post(request.body);
             response.status(HttpStatus.CREATED).json(newUser);
         } catch (error) {
