@@ -15,11 +15,33 @@ class Mongo extends BaseCollection {
         }
         return this.client.db().collection('users').insertOne(b);
     }
-    delete(body: unknown): Promise<unknown> {
-        throw new Error("Method not implemented.");
+
+    async delete(id: string): Promise<unknown> {
+        const deletedUser = await UserModel.findByIdAndDelete(id);
+        if (!deletedUser) {
+            throw new ErrorHandler(HttpStatus.NOT_FOUND, 'User not found');
+        }
+        return { message:'User deleted successfully' };
     }
-    put(body: unknown): Promise<unknown> {
-        throw new Error("Method not implemented.");
+    async put(id:string, body: unknown): Promise<unknown> {
+        try {
+            const { nombre, email, password } = body as { nombre: string; email: string; password: string };
+            const user = await UserModel.findById(id);
+            if (!user) {
+                throw new ErrorHandler(HttpStatus.NOT_FOUND, 'User not found');
+            }
+
+            if(email && email !== user.email) {
+                const existingUser = await UserModel.findOne({ email });
+                if (existingUser) {
+                    throw new ErrorHandler(HttpStatus.BAD_REQUEST, 'Email already in use');
+                }
+            }
+
+            return UserModel.findByIdAndUpdate(id, { nombre, email, password }, { new: true }).select('-password');
+        } catch (error) {
+            
+        }
     }
 
   async getById(id: string): Promise<unknown> {

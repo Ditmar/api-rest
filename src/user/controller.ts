@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 import { HttpStatus } from '../utils/httpStatus';
+import { ErrorHandler } from '../utils/errorHandler';
 
 const userController = (dataCollection: BaseCollection) => {
   const get = async (req: Request, res: Response) => {
