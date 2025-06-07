@@ -3,37 +3,32 @@ import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
-import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
-
-
 console.log('Development mode');
 
 const server = express();
 
 class App {
-  private dataCollection: BaseCollection | null = null;
-
-  constructor() {
-    this.initializeMiddlewares();
-    this.initCollections();
-    this.initializeRoutes();
-  }
-
-  private initCollections() {
-    this.dataCollection = DataCollectionFactory.createDataCollection('index'); // o 'mongo' o lo que uses
-  }
-
-  private initializeMiddlewares() {
-    server.use(express.json());
-    server.use(express.urlencoded({ extended: true }));
-  }
-
-  private initializeRoutes() {
-    if (!this.dataCollection) {
-      throw new Error('Data collection is not initialized');
+    private dataCollection: BaseCollection | null = null;
+    constructor() {
+        this.initializeMiddlewares();
+        this.initCollections();
+        this.initializeRoutes();
     }
-    server.use('/user', userWrapper(this.dataCollection));
-  }
+
+    private initCollections() {
+       this.dataCollection =  DataCollectionFactory.createDataCollection('api');
+    }
+    private initializeMiddlewares() {
+        server.use(express.json());
+        server.use(express.urlencoded({ extended: true }));
+    }
+
+    private initializeRoutes() {
+        if (!this.dataCollection) {
+            throw new Error('Data collection is not initialized');
+        }
+        server.use('/user', userWrapper(this.dataCollection));
+    }
 }
 
 async function startServer() {
