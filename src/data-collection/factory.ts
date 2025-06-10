@@ -1,5 +1,5 @@
 import { Mongo } from './mongo/Mongo';
-import { Postgres } from './postgress/Postgres';
+import { Postgres } from './postgres/Postgres';
 import { PokeApi  } from './api/PokeApi';
 import { BaseCollection } from './base-collection/baseCollection';
 class DataCollectionFactory {
