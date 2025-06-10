@@ -1,20 +1,85 @@
 import { BaseCollection } from "../base-collection/baseCollection";
+import dotenv from "dotenv";
+import { CreationAttributes, Sequelize } from "@sequelize/core";
+import { PostgresDialect } from "@sequelize/postgres";
+import { BaseModel } from "./model/baseModel";
+
+dotenv.config();
 
 class Postgres extends BaseCollection {
-    get(): Promise<unknown> {
-        return new Promise((resolve) => {
-            resolve([{data: "postgress"}, {data: "postgress"}])
-        });
+  private client: Sequelize | null = null;
+
+  async disconnect(): Promise<void> {
+    if (this.client) {
+      try {
+        await this.client.close();
+        this.client = null;
+      } catch (error) {
+        throw new Error(
+          `Failed to disconnect from Postgres: ${(error as Error).message}`
+        );
+      }
     }
-    post(body: unknown): Promise<unknown> {
-        throw new Error("Method not implemented.");
+  }
+
+  async connect(): Promise<void> {
+    try {
+      const sequelize = new Sequelize({
+        dialect: PostgresDialect,
+        database: process.env.PGDATABASE || "postgres",
+        user: process.env.PGUSER || "postgres",
+        password: process.env.PGPASSWORD || "password",
+        host: process.env.PGHOST || "localhost",
+        port: parseInt(process.env.PGPORT || "5432", 10),
+        ssl: process.env.PGSSL === "true" ? true : false,
+        clientMinMessages: "notice",
+        models: [BaseModel],
+      });
+
+      await sequelize.authenticate();
+      this.client = sequelize;
+    } catch (error) {
+      throw new Error(
+        `Failed to connect to Postgres: ${(error as Error).message}`
+      );
     }
-    delete(body: unknown): Promise<unknown> {
-        throw new Error("Method not implemented.");
-    }
-    put(body: unknown): Promise<unknown> {
-        throw new Error("Method not implemented.");
+  }
+
+  async get(): Promise<unknown> {
+    if (!this.client) {
+      throw new Error("Postgres client is not connected.");
     }
 
+    // Todo implement the logic to retrieve data from a specific table
+    return BaseModel.findAll();
+  }
+
+  post(body: unknown): Promise<unknown> {
+    if (!this.client) {
+      throw new Error("Postgres client is not connected.");
+    }
+
+    console.info("Postgres post method called with body:", body);
+
+    // Todo implement the logic to insert data into a specific table
+    return BaseModel.create(body as CreationAttributes<BaseModel>);
+  }
+  delete(body: unknown): Promise<unknown> {
+    if (!this.client) {
+      throw new Error("Postgres client is not connected.");
+    }
+
+    return BaseModel.destroy({ where: body as Record<string, unknown> });
+  }
+  put(body: unknown): Promise<unknown> {
+    if (!this.client) {
+      throw new Error("Postgres client is not connected.");
+    }
+
+    return BaseModel.update(body as CreationAttributes<BaseModel>, {
+      where: body as Record<string, unknown>,
+    });
+  }
 }
-export { Postgres }
+
+export { Postgres };

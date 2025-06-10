@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
-import { BaseCollection } from './data-collection/base-collection/baseCollection';
+import type { BaseCollection } from './data-collection/base-collection/baseCollection';
 console.log('Development mode');
 dotenv.config();
 
