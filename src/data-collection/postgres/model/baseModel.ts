@@ -7,6 +7,4 @@ import {
 export class BaseModel extends Model<
   InferAttributes<BaseModel>,
   InferCreationAttributes<BaseModel>
-> {
-  // Define attributes for the base model
-}
+> {}

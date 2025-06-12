@@ -45,12 +45,11 @@ class Postgres extends BaseCollection {
     }
   }
 
-  async get(): Promise<unknown> {
+  get(): Promise<unknown> {
     if (!this.client) {
       throw new Error("Postgres client is not connected.");
     }
 
-    // Todo implement the logic to retrieve data from a specific table
     return BaseModel.findAll();
   }
 
@@ -59,11 +58,9 @@ class Postgres extends BaseCollection {
       throw new Error("Postgres client is not connected.");
     }
 
-    console.info("Postgres post method called with body:", body);
-
-    // Todo implement the logic to insert data into a specific table
     return BaseModel.create(body as CreationAttributes<BaseModel>);
   }
+
   delete(body: unknown): Promise<unknown> {
     if (!this.client) {
       throw new Error("Postgres client is not connected.");
@@ -71,6 +68,7 @@ class Postgres extends BaseCollection {
 
     return BaseModel.destroy({ where: body as Record<string, unknown> });
   }
+
   put(body: unknown): Promise<unknown> {
     if (!this.client) {
       throw new Error("Postgres client is not connected.");
