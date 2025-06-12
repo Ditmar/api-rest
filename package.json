@@ -1,10 +1,6 @@
 {
   "name": "api-rest",
-<<<<<<< HEAD
   "version": "1.0.4-rc.8",
-=======
-  "version": "1.0.0-rc.3",
->>>>>>> 3b23eb2 (feature(fix)/FRONTEND-1)
   "description": "",
   "scripts": {
     "build": "tsc",
