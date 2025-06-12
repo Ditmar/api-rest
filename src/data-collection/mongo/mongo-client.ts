@@ -21,7 +21,7 @@ export class MongoClient{
         const database = ConfigSingleton.getInstance().MONGO_DATABASE;
 
         
-        const uri = `MongoClient://${username}:${password}@${host}:${port}/${database}`;
+        const uri = `mongodb://${username}:${password}@${host}:${port}/${database}`;
         MongoClient.instance = new Mongo(uri);
         try {
             await MongoClient.instance.connect();

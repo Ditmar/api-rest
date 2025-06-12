@@ -1,11 +1,19 @@
 import { BaseCollection } from "../base-collection/baseCollection";
-import { MongoClient } from './mongo-client'
+import { MongoClient } from './mongo-client';
 class Mongo extends BaseCollection {
-    get(): Promise<unknown> {
-        return MongoClient.getInstance().db().collection().find();
+    client
+    constructor() {
+        super();
+        this.client = MongoClient.getInstance();
     }
-    post(body: unknown): Promise<unknown> {
-        throw new Error("Method not implemented.");
+    get(): Promise<unknown> {
+        return  this.client.db().collection('users').find().toArray();
+    }
+    post(body: any): Promise<unknown> {
+        const b = {
+            ...body,
+        }
+        return this.client.db().collection('users').insertOne(b);
     }
     delete(body: unknown): Promise<unknown> {
         throw new Error("Method not implemented.");

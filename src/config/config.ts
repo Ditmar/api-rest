@@ -11,7 +11,7 @@ class ConfigSingleton {
         MONGO_INITDB_ROOT_PASSWORD: string;
         POSTGRES_USER: string;
         POSTGRES_PASSWORD: string;
-        MONGO_HOST: string;5
+        MONGO_HOST: string;
         MONGO_DATABASE: string;
         MONGO_PORT: number;
 
