@@ -7,6 +7,7 @@
     "start": "yarn build && node ./dist/App.js",
     "dev": "nodemon",
     "lint": "eslint src/**/*.ts",
+    "test:postgres": "node sync-env-vars.js && cross-env NODE_ENV=test vitest run --testNamePattern=Postgres",
     "db:start:local": "docker-compose -f ./dev-database/dev-database.yml up -d",
     "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up",
     "test": "yarn prepare-test-db && vitest --config vitest.config.ts "
@@ -14,8 +15,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sequelize/core": "^7.0.0-alpha.46",
-    "@sequelize/postgres": "^7.0.0-alpha.46",
+    "@sequelize/core": "7.0.0-alpha.46",
+    "@sequelize/postgres": "7.0.0-alpha.46",
     "bcrypt": "6.0.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -40,8 +41,9 @@
     "mongoose": "^8.16.2",
     "nodemon": "^3.1.10",
     "pg": "^8.16.3",
-    "ts-node": "^10.9.2",
+    "pg-hstore": "^2.3.4",
     "tsc": "^2.0.4",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0",
     "vitest": "^3.2.4"

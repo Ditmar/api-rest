@@ -1,7 +1,7 @@
 import { MongoProvider } from '../data/providers/MongoProvider';
 import { Mongo } from './mongo/Mongo';
 import { Postgres } from './postgres/Postgres';
-import { PokeApi } from './api/PokeApi';
+import { PokeApi  } from './api/PokeApi';
 import { BaseCollection } from './base-collection/baseCollection';
 import { IndexCollection } from './mongo/IndexCollection';
 
