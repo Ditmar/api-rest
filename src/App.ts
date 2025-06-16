@@ -12,6 +12,7 @@ import { indexesWrapper } from './indexes/routes'
 import { articlesWrapper } from './articles/routes'; 
 import { ArticleModel } from './articles/models';
 import { bibliographyRoute } from './routes/bibliography';
+import { imageWrapper } from './GestionImages/imageRoutes';
 
 console.log('Development mode');
 
@@ -27,6 +28,7 @@ class App {
     this.initCollections();
     this.initializeRoutes();
   }
+
 
   private initCollections() {
     this.dataCollection = DataCollectionFactory.createDataCollection('index');
@@ -57,6 +59,7 @@ class App {
     server.use('/articles', articlesWrapper(this.articleCollection));
     server.use('/authors', authorRoute());
     server.use('/bibliography', bibliographyRoute());
+    server.use('/image', imageWrapper());
   }
 }
 
