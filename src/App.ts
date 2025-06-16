@@ -3,6 +3,7 @@ import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
+import { imageWrapper } from './GestionImages/imageRoutes';
 console.log('Development mode');
 
 
@@ -29,6 +30,7 @@ class App {
             throw new Error('Data collection is not initialized');
         }
         server.use('/user', userWrapper(this.dataCollection));
+        server.use('/image', imageWrapper());
     }
 }
 new App();
