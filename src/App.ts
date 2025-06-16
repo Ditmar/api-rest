@@ -4,7 +4,7 @@ import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
-
+import { imageWrapper } from './GestionImages/imageRoutes';
 
 console.log('Development mode');
 
@@ -19,6 +19,7 @@ class App {
     this.initializeRoutes();
   }
 
+
   private initCollections() {
     this.dataCollection = DataCollectionFactory.createDataCollection('index'); // o 'mongo' o lo que uses
   }
@@ -28,12 +29,13 @@ class App {
     server.use(express.urlencoded({ extended: true }));
   }
 
-  private initializeRoutes() {
-    if (!this.dataCollection) {
-      throw new Error('Data collection is not initialized');
+    private initializeRoutes() {
+        if (!this.dataCollection) {
+            throw new Error('Data collection is not initialized');
+        }
+        server.use('/user', userWrapper(this.dataCollection));
+        server.use('/image', imageWrapper());
     }
-    server.use('/user', userWrapper(this.dataCollection));
-  }
 }
 
 async function startServer() {
