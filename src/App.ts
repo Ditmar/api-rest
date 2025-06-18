@@ -3,6 +3,7 @@ import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
+
 console.log('Development mode');
 
 
@@ -16,8 +17,11 @@ class App {
         this.initializeRoutes();
     }
 
+    
+
     private initCollections() {
-       this.dataCollection =  DataCollectionFactory.createDataCollection('api');
+    this.dataCollection =  DataCollectionFactory.createDataCollection('mongo');
+
     }
     private initializeMiddlewares() {
         server.use(express.json());
@@ -28,7 +32,7 @@ class App {
         if (!this.dataCollection) {
             throw new Error('Data collection is not initialized');
         }
-        server.use('/user', userWrapper(this.dataCollection));
+        server.use('/usuarios', userWrapper(this.dataCollection));
     }
 }
 new App();

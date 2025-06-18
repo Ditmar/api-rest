@@ -6,13 +6,16 @@ class Postgres extends BaseCollection {
             resolve([{data: "postgress"}, {data: "postgress"}])
         });
     }
-    post(body: unknown): Promise<unknown> {
+    getById(): Promise<unknown> {
         throw new Error("Method not implemented.");
     }
-    delete(body: unknown): Promise<unknown> {
+    post(): Promise<unknown> {
         throw new Error("Method not implemented.");
     }
-    put(body: unknown): Promise<unknown> {
+    delete(): Promise<unknown> {
+        throw new Error("Method not implemented.");
+    }
+    put(): Promise<unknown> {
         throw new Error("Method not implemented.");
     }
 

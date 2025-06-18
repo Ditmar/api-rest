@@ -1,23 +1,61 @@
 import { Request, Response } from 'express';
 import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 import { HttpStatus } from '../utils/httpStatus';
+import { ErrorHandler } from '../utils/errorHandler';
 
 const userController = (dataCollection: BaseCollection) => {
-    const get = async(request: Request, response: Response) => {
-        response.status(HttpStatus.OK).json({message: "Hello from user controller", data: await dataCollection.get()});
+    // const get = async(request: Request, response: Response) => {
+    //     response.status(HttpStatus.OK).json({message: "Hello from user controller", data: await dataCollection.get()});
+    // }
+
+    const getUsers = async (request: Request, response: Response) => {
+        try {
+            const users = await dataCollection.get();
+            response.status(HttpStatus.OK).json(users);
+        } catch (error) {
+            ErrorHandler.handler(error, response);
+        }
     }
-    const post = (request: Request, response: Response) => {
-        const body = request.body;
-        response.send(body);
+
+    const getUserById = async (request: Request, response: Response) => {
+        try {
+            const { id } = request.params;
+            const user = await dataCollection.getById(id);
+            response.status(HttpStatus.OK).json(user);
+        } catch (error) {
+            ErrorHandler.handler(error, response);
+
+        }
     }
-    const deleteUser = (request: Request, response: Response) => {
-        const body = request.body;
-        response.send(body);
+
+    const createUser = async (request: Request, response: Response) => {
+        try {
+            const newUser = await dataCollection.post(request.body);
+            response.status(HttpStatus.CREATED).json(newUser);
+        } catch (error) {
+            ErrorHandler.handler(error, response);
+        }
     }
-    const put = (request: Request, response: Response) => {
-        const body = request.body;
-        response.send(body);
+
+    const deleteUser = async (request: Request, response: Response) => {
+        try {
+            const { id } = request.params;
+            const result = await dataCollection.delete(id);
+            response.status(HttpStatus.OK).json(result);
+        } catch (error) {
+            ErrorHandler.handler(error, response);
+        }
     }
-    return {get, post, deleteUser, put}
+
+    const updateUser = async (request: Request, response: Response) => {
+        try {
+            const { id } = request.params;
+            const updatedUser = await dataCollection.put(id, request.body);
+            response.status(HttpStatus.OK).json(updatedUser);
+        } catch (error) {
+            ErrorHandler.handler(error, response);
+        }
+    }
+    return { getUserById, createUser, deleteUser, updateUser, getUsers }
 }
 export { userController };
