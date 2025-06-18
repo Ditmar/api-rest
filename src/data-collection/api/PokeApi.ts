@@ -10,6 +10,9 @@ class PokeApi extends BaseCollection {
         const json = await data.json();
         return json;
     }
+    getById(): Promise<unknown> {
+        throw new Error("Method not implemented.");
+    }
     post(): Promise<unknown> {
         throw new Error("Method not implemented.");
     }
