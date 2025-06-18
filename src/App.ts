@@ -3,6 +3,8 @@ import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
+import { connectMongoDB } from './db/mongo';
+
 console.log('Development mode');
 
 const server = express();
@@ -15,8 +17,14 @@ class App {
         this.initializeRoutes();
     }
 
+    private async initDatabase() {
+        await connectMongoDB()
+    }
+
     private initCollections() {
-       this.dataCollection =  DataCollectionFactory.createDataCollection('api');
+    //    this.dataCollection =  DataCollectionFactory.createDataCollection('api');
+    this.dataCollection =  DataCollectionFactory.createDataCollection('mongo');
+
     }
     private initializeMiddlewares() {
         server.use(express.json());
