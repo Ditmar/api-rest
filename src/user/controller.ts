@@ -27,8 +27,12 @@ const userController = {
         return res.status(HttpStatus.NOT_FOUND).json({ message: 'Índice no encontrado' });
       }
       res.status(HttpStatus.OK).json({ message: 'Índice encontrado', data: index });
-    } catch (error) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error interno del servidor', error: (error as Error).message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error interno del servidor', error: error.message });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido' });
+      }
     }
   },
 
@@ -66,8 +70,12 @@ const userController = {
       });
 
       res.status(HttpStatus.CREATED).json({ message: 'Registro de datos exitoso', data: result });
-    } catch (error: any) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al registrar datos', error: error.message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al registrar datos', error: error.message });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido al registrar datos' });
+      }
     }
   },
 
@@ -116,8 +124,12 @@ const userController = {
       }
 
       res.status(HttpStatus.OK).json({ message: 'Actualización exitosa', data: result });
-    } catch (err: any) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al actualizar', error: err.message });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al actualizar', error: err.message });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido al actualizar' });
+      }
     }
   },
 
@@ -133,8 +145,12 @@ const userController = {
         return res.status(HttpStatus.NOT_FOUND).json({ message: 'Índice no encontrado para eliminar' });
       }
       res.status(HttpStatus.OK).json({ message: 'Eliminación exitosa' });
-    } catch {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al eliminar el índice' });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al eliminar el índice', error: error.message });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido al eliminar el índice' });
+      }
     }
   },
 
@@ -149,8 +165,12 @@ const userController = {
       const result = await db().collection('articles').insertOne({ title });
 
       res.status(HttpStatus.CREATED).json({ message: 'Artículo creado exitosamente', data: result });
-    } catch (error: any) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al crear artículo', error: error.message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al crear artículo', error: error.message });
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido al crear artículo' });
+      }
     }
   }
 };
