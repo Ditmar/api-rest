@@ -20,7 +20,7 @@ const userController = (dataCollection: BaseCollection) => {
     const getUserById = async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const user = await dataCollection.get(id);
+            const user = await dataCollection.getById(id);
             response.status(HttpStatus.OK).json(user);
         } catch (error) {
             ErrorHandler.handler(error, response);
