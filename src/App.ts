@@ -19,8 +19,14 @@ class App {
         this.initializeRoutes();
     }
 
+    private async initDatabase() {
+        await connectMongoDB()
+    }
+
     private initCollections() {
-       this.dataCollection =  DataCollectionFactory.createDataCollection('api');
+    //    this.dataCollection =  DataCollectionFactory.createDataCollection('api');
+    this.dataCollection =  DataCollectionFactory.createDataCollection('mongo');
+
     }
     private initializeMiddlewares() {
         server.use(express.json());
