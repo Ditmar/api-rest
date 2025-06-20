@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { IAuthPayload, IAuthService } from '../../types/jwt';
+import { HttpStatus } from '../../utils/httpStatus';
 
 export abstract class BaseAuthService<T> implements IAuthService<T> {
     abstract validateCredentials(credentials: T): Promise<IAuthPayload | null>
@@ -11,13 +12,13 @@ export abstract class BaseAuthService<T> implements IAuthService<T> {
                     req.user = authPayload;
                     next();
                 } else {
-                    res.status(401).json({ error: 'Unauthorized' });
+                    res.status(HttpStatus.UNAUTHORIZED).json({ error: 'Unauthorized' });
                 }
             } catch (error) {
                 if (error instanceof Error) {
-                    res.status(401).json({ error: error.message });
+                    res.status(HttpStatus.UNAUTHORIZED).json({ error: error.message });
                 }
-                res.status(500).json({ error: 'Internal Server Error' });
+                res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
             }
 
         }
