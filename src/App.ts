@@ -1,37 +1,20 @@
+// src/App.ts
 import express from 'express';
+import userRoutes from './user/userRoutes';
 import { ConfigSingleton } from './config/config';
-import { userWrapper } from './user/userRoutes';
-import { DataCollectionFactory } from './data-collection/factory';
-import { BaseCollection } from './data-collection/base-collection/baseCollection';
-console.log('Development mode');
+import MongoConnection from './db';
 
+const app = express();
 
-const server =  express();
+app.use(express.json());
+app.use('/indexes', userRoutes);
 
-class App {
-    private dataCollection: BaseCollection | null = null;
-    constructor() {
-        this.initializeMiddlewares();
-        this.initCollections();
-        this.initializeRoutes();
-    }
+const PORT = ConfigSingleton.getInstance().PORT;
 
-    private initCollections() {
-       this.dataCollection =  DataCollectionFactory.createDataCollection('api');
-    }
-    private initializeMiddlewares() {
-        server.use(express.json());
-        server.use(express.urlencoded({ extended: true }));
-    }
+(async () => {
+  await MongoConnection.connect();
 
-    private initializeRoutes() {
-        if (!this.dataCollection) {
-            throw new Error('Data collection is not initialized');
-        }
-        server.use('/user', userWrapper(this.dataCollection));
-    }
-}
-new App();
-server.listen(ConfigSingleton.getInstance().PORT, () => {
-    console.log(`Server is running on port ${ConfigSingleton.getInstance().PORT}`);
-});
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+})();
