@@ -14,6 +14,12 @@ class ConfigSingleton {
         MONGO_HOST: string;
         MONGO_DATABASE: string;
         MONGO_PORT: number;
+        JWT_SECRET: string;
+        JWT_TTL: number;
+        JWT_REFRESH_TTL: number;
+        JWT_ALGORITHM: 'HS256' | 'RS256';
+        JWT_ISSUER: string;
+        JWT_AUDIENCE: string;
 
     } | null = null;
     private static createSchema() {
@@ -29,25 +35,31 @@ class ConfigSingleton {
             MONGO_HOST: z.string(),
             MONGO_DATABASE: z.string(),
             MONGO_PORT: z.coerce.number().default(27017),
+            JWT_SECRET: z.string().min(30),
+            JWT_TTL: z.coerce.number(),
+            JWT_REFRESH_TTL: z.coerce.number(),
+            JWT_ALGORITHM: z.enum(['HS256', 'RS256']),
+            JWT_ISSUER: z.string().min(1),
+            JWT_AUDIENCE: z.string().min(1),
         });
-          
-          const parsed = configSchema.safeParse(process.env);
-          if (!parsed.success) {
-              console.error('Invalid environment variables:', parsed.error.format());
-              process.exit(1);
-          }
-          const env = parsed.data;
+
+        const parsed = configSchema.safeParse(process.env);
+        if (!parsed.success) {
+            console.error('Invalid environment variables:', parsed.error.format());
+            process.exit(1);
+        }
+        const env = parsed.data;
         return env;
     };
 
     public static getInstance() {
-        
+
         if (ConfigSingleton.env === null) {
             console.log('create instance ');
             ConfigSingleton.env = ConfigSingleton.createSchema();
         }
-        
+
         return ConfigSingleton.env;
     }
 }
-export { ConfigSingleton }; 
+export { ConfigSingleton };
