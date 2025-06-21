@@ -8,7 +8,8 @@
     "dev": "nodemon",
     "lint": "eslint src/**/*.ts",
     "db:start:local": "docker-compose -f ./dev-database/dev-database.yml up -d",
-    "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up"
+    "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up",
+    "test": "vitest"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +30,7 @@
     "nodemon": "^3.1.10",
     "tsc": "^2.0.4",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.32.0"
+    "typescript-eslint": "^8.32.0",
+    "vitest": "^3.2.4"
   }
 }
