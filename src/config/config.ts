@@ -14,7 +14,8 @@ class ConfigSingleton {
         MONGO_HOST: string;
         MONGO_DATABASE: string;
         MONGO_PORT: number;
-
+        MAX_FILE_SIZE: number;
+        BASE_URL: string;
     } | null = null;
     private static createSchema() {
         const configSchema = z.object({
@@ -29,6 +30,8 @@ class ConfigSingleton {
             MONGO_HOST: z.string(),
             MONGO_DATABASE: z.string(),
             MONGO_PORT: z.coerce.number().default(27017),
+            MAX_FILE_SIZE: z.coerce.number().default(5 * 1024 * 1024),
+            BASE_URL: z.string().url().default('http://localhost:3000'),
         });
           
           const parsed = configSchema.safeParse(process.env);
