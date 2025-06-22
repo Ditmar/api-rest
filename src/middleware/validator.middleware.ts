@@ -1,11 +1,12 @@
 import type { Request, Response, NextFunction } from 'express';
 import { ZodSchema, ZodError } from 'zod';
+import { HttpStatus } from '../utils/httpStatus';
 
 export const validateMiddleware = (schema: ZodSchema) => (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = schema.safeParse(req.body);
         if (!result.success) {
-            res.status(400).json({
+            res.status(HttpStatus.BAD_REQUEST).json({
                 errors: result.error.errors.map(err => ({
                     message: err.message,
                     path: err.path
@@ -15,7 +16,7 @@ export const validateMiddleware = (schema: ZodSchema) => (req: Request, res: Res
         next();
     } catch (error) {
         if (error instanceof ZodError) {
-            res.status(400).json({
+            res.status(HttpStatus.BAD_REQUEST).json({
                 errors: error.errors.map(err => ({
                     message: err.message,
                     path: err.path
