@@ -1,178 +1,85 @@
 import { Request, Response } from 'express';
+import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 import { HttpStatus } from '../utils/httpStatus';
-import { ObjectId } from 'mongodb';
-import MongoConnection from '../db';
 
-const db = () => MongoConnection.getClient().db();
-
-function isValidObjectId(id: string): boolean {
-  return ObjectId.isValid(id) && String(new ObjectId(id)) === id;
-}
-
-const userController = {
-  async get(req: Request, res: Response) {
-    const indexes = await db().collection('indexes').find().sort({ position: 1 }).toArray();
-    res.status(HttpStatus.OK).json({ message: 'Datos obtenidos correctamente', data: indexes });
-  },
-
-  async getById(req: Request, res: Response) {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: 'ID inválido' });
-    }
-
+const userController = (dataCollection: BaseCollection) => {
+  const get = async (req: Request, res: Response) => {
     try {
-      const index = await db().collection('indexes').findOne({ _id: new ObjectId(id) });
-      if (!index) {
-        return res.status(HttpStatus.NOT_FOUND).json({ message: 'Índice no encontrado' });
-      }
-      res.status(HttpStatus.OK).json({ message: 'Índice encontrado', data: index });
+      const data = await dataCollection.get();
+      res.status(HttpStatus.OK).json({ message: "Hello from user controller", data });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error interno del servidor', error: error.message });
-      } else {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido' });
-      }
-    }
-  },
-
-  async post(req: Request, res: Response) {
-    try {
-      const { title, description, articles, position, visible } = req.body;
-
-      if (!Array.isArray(articles)) {
-        return res.status(HttpStatus.BAD_REQUEST).json({ message: "'articles' debe ser un arreglo" });
-      }
-
-      for (const id of articles) {
-        if (!isValidObjectId(id)) {
-          return res.status(HttpStatus.BAD_REQUEST).json({ message: `ID inválido en articles: ${id}` });
-        }
-      }
-
-      if (articles.length > 0) {
-        const objectIds = articles.map((id: string) => new ObjectId(id));
-        const validArticles = await db().collection('articles').find({
-          _id: { $in: objectIds }
-        }).toArray();
-
-        if (validArticles.length !== articles.length) {
-          return res.status(HttpStatus.BAD_REQUEST).json({ message: 'Algunos artículos no existen' });
-        }
-      }
-
-      const result = await db().collection('indexes').insertOne({
-        title,
-        description,
-        articles: articles.map((id: string) => new ObjectId(id)),
-        position,
-        visible
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: error instanceof Error ? error.message : "Unknown error"
       });
-
-      res.status(HttpStatus.CREATED).json({ message: 'Registro de datos exitoso', data: result });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al registrar datos', error: error.message });
-      } else {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido al registrar datos' });
-      }
     }
-  },
+  };
 
-  async put(req: Request, res: Response) {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: 'ID inválido' });
-    }
-
-    const update = req.body;
-
+  const getById = async (req: Request, res: Response): Promise<void> => {
+    const id = req.params.id;
     try {
-      if (update.articles) {
-        if (!Array.isArray(update.articles)) {
-          return res.status(HttpStatus.BAD_REQUEST).json({ message: "'articles' debe ser un arreglo" });
-        }
-
-        for (const artId of update.articles) {
-          if (!isValidObjectId(artId)) {
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: `ID inválido en articles: ${artId}` });
-          }
-        }
-
-        if (update.articles.length > 0) {
-          const objectIds = update.articles.map((id: string) => new ObjectId(id));
-          const validArticles = await db().collection('articles').find({
-            _id: { $in: objectIds }
-          }).toArray();
-
-          if (validArticles.length !== update.articles.length) {
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: 'Algunos artículos no existen' });
-          }
-          update.articles = objectIds;
-        } else {
-          update.articles = [];
-        }
+      const data = await dataCollection.getById(id);
+      if (!data) {
+        res.status(HttpStatus.NOT_FOUND).json({ message: "Not found" });
+        return;
       }
-
-      const result = await db().collection('indexes').updateOne(
-        { _id: new ObjectId(id) },
-        { $set: update }
-      );
-
-      if (result.matchedCount === 0) {
-        return res.status(HttpStatus.NOT_FOUND).json({ message: 'Índice no encontrado para actualizar' });
-      }
-
-      res.status(HttpStatus.OK).json({ message: 'Actualización exitosa', data: result });
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al actualizar', error: err.message });
-      } else {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido al actualizar' });
-      }
-    }
-  },
-
-  async deleteUser(req: Request, res: Response) {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(HttpStatus.BAD_REQUEST).json({ message: 'ID inválido' });
-    }
-
-    try {
-      const result = await db().collection('indexes').deleteOne({ _id: new ObjectId(id) });
-      if (result.deletedCount === 0) {
-        return res.status(HttpStatus.NOT_FOUND).json({ message: 'Índice no encontrado para eliminar' });
-      }
-      res.status(HttpStatus.OK).json({ message: 'Eliminación exitosa' });
+      res.status(HttpStatus.OK).json({ data });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al eliminar el índice', error: error.message });
-      } else {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido al eliminar el índice' });
-      }
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
     }
-  },
+  };
 
-  async createArticle(req: Request, res: Response) {
+  const post = async (req: Request, res: Response) => {
+    const body = req.body;
     try {
-      const { title } = req.body;
-
-      if (!title || typeof title !== 'string') {
-        return res.status(HttpStatus.BAD_REQUEST).json({ message: "'title' es requerido y debe ser texto" });
-      }
-
-      const result = await db().collection('articles').insertOne({ title });
-
-      res.status(HttpStatus.CREATED).json({ message: 'Artículo creado exitosamente', data: result });
+      const result = await dataCollection.post(body);
+      res.status(HttpStatus.CREATED).json({ message: "Created", result });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al crear artículo', error: error.message });
-      } else {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error desconocido al crear artículo' });
-      }
+      res.status(HttpStatus.BAD_REQUEST).json({
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
     }
-  }
+  };
+
+  const put = async (req: Request, res: Response) => {
+    const body = req.body;
+    try {
+      const result = await dataCollection.put(body);
+      res.status(HttpStatus.OK).json({ message: "Updated", result });
+    } catch (error: unknown) {
+      res.status(HttpStatus.BAD_REQUEST).json({
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  };
+
+  const deleteUser = async (req: Request, res: Response) => {
+    const body = req.body;
+    try {
+      const result = await dataCollection.delete(body);
+      res.status(HttpStatus.OK).json({ message: "Deleted", result });
+    } catch (error: unknown) {
+      res.status(HttpStatus.BAD_REQUEST).json({
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  };
+
+  // ✅ Este método ahora está dentro del scope y usa la dataCollection bien
+  const postArticle = async (req: Request, res: Response) => {
+    const body = req.body;
+    try {
+      const result = await dataCollection.postArticle(body);
+      res.status(HttpStatus.CREATED).json({ message: "Article Created", result });
+    } catch (error: unknown) {
+      res.status(HttpStatus.BAD_REQUEST).json({
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  };
+
+  return { get, getById, post, put, deleteUser, postArticle };
 };
 
 export { userController };

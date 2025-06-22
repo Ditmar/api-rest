@@ -1,19 +1,19 @@
-import { Router, Request, Response, NextFunction, RequestHandler } from 'express';
+import { Router } from 'express';
 import { userController } from './controller';
+import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 
-const router = Router();
+const userWrapper = (dataCollection: BaseCollection) => {
+  const { get, getById, post, put, deleteUser, postArticle } = userController(dataCollection);
+  const router = Router();
 
+  router.get('/', get);
+  router.get('/:id', getById);
+  router.post('/', post);
+  router.put('/', put);
+  router.delete('/', deleteUser);
+  router.post('/article', postArticle);
 
-const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<unknown>): RequestHandler =>
-  (req, res, next) => {
-    fn(req, res, next).catch(next);
-  };
+  return router;
+};
 
-router.post('/articles', asyncHandler(userController.createArticle));
-router.get('/', asyncHandler(userController.get));
-router.get('/:id', asyncHandler(userController.getById));
-router.post('/', asyncHandler(userController.post));
-router.put('/:id', asyncHandler(userController.put));
-router.delete('/:id', asyncHandler(userController.deleteUser));
-
-export default router;
+export { userWrapper };
