@@ -20,7 +20,7 @@ export class MongoClient{
         const password = ConfigSingleton.getInstance().MONGO_INITDB_ROOT_PASSWORD;
         const database = ConfigSingleton.getInstance().MONGO_DATABASE;
 
-        // 🔄 MODIFICADO: agregada la opción authSource=admin para autenticación en Docker
+        
         const uri = `mongodb://${username}:${password}@${host}:${port}/${database}?authSource=admin`;
 
         MongoClient.instance = new Mongo(uri);

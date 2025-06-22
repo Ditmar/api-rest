@@ -66,7 +66,7 @@ const userController = (dataCollection: BaseCollection) => {
     }
   };
 
-  // ✅ Este método ahora está dentro del scope y usa la dataCollection bien
+ 
   const postArticle = async (req: Request, res: Response) => {
     const body = req.body;
     try {

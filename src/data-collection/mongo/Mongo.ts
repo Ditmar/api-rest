@@ -21,9 +21,9 @@ class Mongo extends BaseCollection {
     put(body: unknown): Promise<unknown> {
         throw new Error("Method not implemented.");
     }
-    // 🚨 Métodos requeridos por la clase base
+
   async getById(id: string): Promise<unknown> {
-    throw new Error("getById not implemented in PokeApi");
+    throw new Error("getById not implemented ");
   }
 
   async postArticle(body: unknown): Promise<unknown> {

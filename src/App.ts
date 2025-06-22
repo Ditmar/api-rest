@@ -38,12 +38,11 @@ class App {
 
 async function startServer() {
   try {
-    // Forzamos que se inicie la conexión a Mongo
+   
     MongoConnection.getInstance();
-    // Esperamos 2 segundos para que la conexión async termine
+   
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // Ahora inicializamos la app y levantamos el servidor
     new App();
     server.listen(ConfigSingleton.getInstance().PORT, () => {
       console.log(`Server is running on port ${ConfigSingleton.getInstance().PORT}`);
