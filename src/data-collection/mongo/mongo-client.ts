@@ -21,12 +21,12 @@ export class MongoClient{
         const database = ConfigSingleton.getInstance().MONGO_DATABASE;
 
         
-        const uri = `mongodb://${username}:${password}@${host}:${port}/${database}?authSource=admin`;
-
+        const uri = `mongodb://${username}:${password}@${host}:${port}/${database}`;
         MongoClient.instance = new Mongo(uri);
         try {
             await MongoClient.instance.connect();
         } catch (error) {
+            // todo: handle error
             console.error('Error on connection', error);
         }
     }

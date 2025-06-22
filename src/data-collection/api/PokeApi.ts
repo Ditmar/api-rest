@@ -19,15 +19,6 @@ class PokeApi extends BaseCollection {
     put(body: unknown): Promise<unknown> {
         throw new Error("Method not implemented.");
     }
-
-    // 🚨 Métodos requeridos por la clase base
-    async getById(id: string): Promise<unknown> {
-        throw new Error("getById not implemented in PokeApi");
-    }
-
-    async postArticle(body: unknown): Promise<unknown> {
-        throw new Error("postArticle not implemented in PokeApi");
-    }
     
 }
 
