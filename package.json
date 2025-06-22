@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "start": "yarn build && node ./dist/App.js",
     "dev": "nodemon",
     "lint": "eslint src/**/*.ts",
