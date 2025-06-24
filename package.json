@@ -1,9 +1,9 @@
 {
   "name": "api-rest",
-  "version": "1.0.4-rc.8",
+  "version": "1.0.4-rc.10",
   "description": "",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc",
     "start": "yarn build && node ./dist/App.js",
     "dev": "nodemon",
     "lint": "eslint src/**/*.ts",
