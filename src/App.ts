@@ -20,7 +20,7 @@ class App {
   }
 
   private initCollections() {
-    this.dataCollection = DataCollectionFactory.createDataCollection('index'); // o 'mongo' o lo que uses
+    this.dataCollection = DataCollectionFactory.createDataCollection('mongo'); 
   }
 
   private initializeMiddlewares() {

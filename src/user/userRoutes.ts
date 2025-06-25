@@ -9,8 +9,8 @@ const userWrapper = (dataCollection: BaseCollection) => {
   router.get('/', get);
   router.get('/:id', getById);
   router.post('/', post);
-  router.put('/', put);
-  router.delete('/', deleteUser);
+  router.put('/:id', put);              
+  router.delete('/:id', deleteUser);
   router.post('/article', postArticle);
 
   return router;

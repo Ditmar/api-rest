@@ -43,9 +43,10 @@ const userController = (dataCollection: BaseCollection) => {
   };
 
   const put = async (req: Request, res: Response) => {
+    const id = req.params.id;
     const body = req.body;
     try {
-      const result = await dataCollection.put(body);
+      const result = await dataCollection.put({ id, ...body });
       res.status(HttpStatus.OK).json({ message: "Updated", result });
     } catch (error: unknown) {
       res.status(HttpStatus.BAD_REQUEST).json({
@@ -55,9 +56,9 @@ const userController = (dataCollection: BaseCollection) => {
   };
 
   const deleteUser = async (req: Request, res: Response) => {
-    const body = req.body;
+    const id = req.params.id;
     try {
-      const result = await dataCollection.delete(body);
+      const result = await dataCollection.delete({ id });
       res.status(HttpStatus.OK).json({ message: "Deleted", result });
     } catch (error: unknown) {
       res.status(HttpStatus.BAD_REQUEST).json({
@@ -66,7 +67,6 @@ const userController = (dataCollection: BaseCollection) => {
     }
   };
 
- 
   const postArticle = async (req: Request, res: Response) => {
     const body = req.body;
     try {
