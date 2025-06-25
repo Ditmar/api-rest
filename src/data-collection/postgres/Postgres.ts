@@ -80,11 +80,11 @@ class Postgres extends BaseCollection {
   }
 
   getById(id: string): Promise<unknown> {
-    throw new Error("getById not implemented in PokeApi");
+    throw new Error(`getById not implemented in PokeApi - ${id}`);
   }
 
   postArticle(body: unknown): Promise<unknown> {
-    throw new Error("postArticle not implemented in PokeApi");
+    throw new Error(`postArticle not implemented in PokeApi - ${body}`);
   }
 }
 
