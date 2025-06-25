@@ -22,13 +22,11 @@ export class IndexCollection extends BaseCollection {
 
 
 
-
-
   async get() {
     return await this.collection().find().sort({ position: 1 }).toArray();
   }
 
-  // MÉTODO AGREGADO para obtener un índice por id
+ 
   async getById(id: string) {
     return await this.collection().findOne({ _id: new ObjectId(id) });
   }
