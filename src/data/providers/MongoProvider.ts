@@ -6,11 +6,11 @@ dotenv.config();
 
 const MONGO_URL_ENV = process.env.MONGO_URL;
 
-if (MONGO_URL_ENV) {
+if (MONGO_URL_ENV && mongoose.connection.readyState === 0) {
     mongoose.connect(MONGO_URL_ENV)
         .then(() => console.log('MongoDB connected successfully (MongoProvider).'))
         .catch(err => console.error('MongoDB connection error (MongoProvider):', err));
-} else {
+} else if (!MONGO_URL_ENV && process.env.NODE_ENV !== 'test') {
     console.error("FATAL ERROR: MONGO_URL is not defined. MongoProvider will not function correctly.");
 }
 
@@ -23,7 +23,7 @@ const genericDataSchema = new Schema<Document<unknown>>(
     }
 );
 
-const GenericModel: Model<Document<unknown>> = mongoose.model<Document<unknown>>('GenericItemProvider', genericDataSchema);
+const GenericModel: Model<Document<unknown>> = mongoose.models.GenericItemProvider || mongoose.model<Document<unknown>>('GenericItemProvider', genericDataSchema);
 
 export class MongoProvider extends BaseCollection {
     private model: Model<Document<unknown>>;
@@ -31,14 +31,10 @@ export class MongoProvider extends BaseCollection {
     constructor() {
         super();
         this.model = GenericModel;
-
-        if (!MONGO_URL_ENV || mongoose.connection.readyState !== 1) {
-            console.warn("MongoProvider instance created, but MongoDB connection might not be immediately ready or MONGO_URL is missing.");
-        }
     }
 
     private _checkConnection(): void {
-        if (mongoose.connection.readyState !== 1) {
+        if (process.env.NODE_ENV !== 'test' && mongoose.connection.readyState !== 1) {
             throw new Error("MongoDB not connected. Please ensure MONGO_URL is set and the database is running.");
         }
     }
@@ -46,6 +42,11 @@ export class MongoProvider extends BaseCollection {
     async get(): Promise<unknown[]> {
         this._checkConnection();
         return this.model.find({}).lean().exec();
+    }
+
+    async getById(id: string): Promise<unknown> {
+        this._checkConnection();
+        return this.model.findById(id).lean().exec();
     }
 
     async post(body: unknown): Promise<unknown> {
@@ -69,9 +70,15 @@ export class MongoProvider extends BaseCollection {
             throw new Error("MongoProvider DELETE: criteria must be an object with an _id property.");
         }
         const result = await this.model.findOneAndDelete(criteria as { _id: any }).lean().exec();
+        
         if (!result) {
             return { acknowledged: true, deletedCount: 0, message: "Document not found with the given criteria." };
         }
+        
         return { acknowledged: true, deletedCount: 1, document: result };
+    }
+
+    async postArticle(body: unknown): Promise<unknown> {
+        return this.post(body);
     }
 }
