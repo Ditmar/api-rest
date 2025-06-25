@@ -31,6 +31,7 @@ const clearMongoCollections = async () => {
   }
 };
 
+import { ObjectId } from 'mongodb';
 class Mongo extends BaseCollection {
     client
     constructor() {
