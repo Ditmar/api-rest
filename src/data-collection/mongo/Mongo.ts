@@ -1,13 +1,19 @@
 import { BaseCollection } from "../base-collection/baseCollection";
-
+import { MongoClient } from './mongo-client';
 class Mongo extends BaseCollection {
-    get(): Promise<unknown> {
-        return new Promise((resolve) => {
-            resolve([{data: "MongoDB"}, {data: "MongoDB"}])
-        });
+    client
+    constructor() {
+        super();
+        this.client = MongoClient.getInstance();
     }
-    post(body: unknown): Promise<unknown> {
-        throw new Error("Method not implemented.");
+    get(): Promise<unknown> {
+        return  this.client.db().collection('users').find().toArray();
+    }
+    post(body: any): Promise<unknown> {
+        const b = {
+            ...body,
+        }
+        return this.client.db().collection('users').insertOne(b);
     }
     delete(body: unknown): Promise<unknown> {
         throw new Error("Method not implemented.");
@@ -15,5 +21,13 @@ class Mongo extends BaseCollection {
     put(body: unknown): Promise<unknown> {
         throw new Error("Method not implemented.");
     }
+
+  async getById(id: string): Promise<unknown> {
+    throw new Error("getById not implemented ");
+  }
+
+  async postArticle(body: unknown): Promise<unknown> {
+    throw new Error("postArticle not implemented in PokeApi");
+  }
 }
 export { Mongo }

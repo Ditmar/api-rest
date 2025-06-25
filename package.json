@@ -1,12 +1,14 @@
 {
   "name": "api-rest",
-  "version": "1.0.2-rc.2",
+  "version": "1.0.4-rc.8",
   "description": "",
   "scripts": {
     "build": "tsc",
     "start": "yarn build && node ./dist/App.js",
     "dev": "nodemon",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "db:start:local": "docker-compose -f ./dev-database/dev-database.yml up -d",
+    "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up"
   },
   "author": "",
   "license": "ISC",
@@ -14,7 +16,9 @@
     "@sequelize/core": "^7.0.0-alpha.46",
     "@sequelize/postgres": "^7.0.0-alpha.46",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongodb": "^6.16.0",
+    "zod": "^3.24.4"
   },
   "engines": {
     "node": ">=20.0.0"

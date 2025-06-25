@@ -78,6 +78,14 @@ class Postgres extends BaseCollection {
       where: body as Record<string, unknown>,
     });
   }
+
+  getById(id: string): Promise<unknown> {
+    throw new Error("getById not implemented in PokeApi");
+  }
+
+  postArticle(body: unknown): Promise<unknown> {
+    throw new Error("postArticle not implemented in PokeApi");
+  }
 }
 
 export { Postgres };
