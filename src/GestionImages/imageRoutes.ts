@@ -7,7 +7,6 @@ import {
   deleteImage,
 } from './controllers/images.controller';
 
-// Configuración de Multer
 const storage = multer.diskStorage({
   destination: './uploads',
   filename: (_, file, cb) =>
@@ -16,14 +15,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  limits: { fileSize: 5 * 1024 * 1024 }, 
   fileFilter: (_, file, cb) => {
     const allowedExt = ['.jpg', '.jpeg', '.png', '.gif'];
     const ext = path.extname(file.originalname).toLowerCase();
     const mimetypeOK = file.mimetype.startsWith('image/');
 
     if (!allowedExt.includes(ext) || !mimetypeOK) {
-      // Rechaza el archivo sin propagar un Error
       return cb(null, false);
     }
     cb(null, true);
@@ -38,15 +36,14 @@ export function imageWrapper() {
       if (err instanceof multer.MulterError) {
         return res.status(400).json({ message: err.message });
       }
-      // Si no hubo error de Multer pero req.file es undefined,
-      // es porque el fileFilter rechazó el archivo
+
       if (!req.file) {
         return res.status(400).json({
           message: 'Solo se permiten imágenes JPG, JPEG, PNG o GIF, y tamaño máximo 5 MB.',
         });
       }
 
-      next(); // listo para el controlador
+      next(); 
     });
   }, uploadImage);
 
