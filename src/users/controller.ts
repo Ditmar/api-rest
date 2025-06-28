@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import { BaseCollectionUser } from '../data-collection/base-collection/baseCollection';
+import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 import { HttpStatus } from '../utils/httpStatus';
 import { ErrorHandler } from '../utils/errorHandler';
+import bcrypt from 'bcrypt';
 
-const usersController = (dataCollection: BaseCollectionUser) => {
+const usersController = (dataCollection: BaseCollection) => {
     
 
     const getUsers = async (request: Request, response: Response) => {
@@ -28,8 +29,19 @@ const usersController = (dataCollection: BaseCollectionUser) => {
 
     const createUser = async (request: Request, response: Response) => {
         try {
-            const newUser = await dataCollection.post(request.body);
-            response.status(HttpStatus.CREATED).json(newUser);
+            const { nombre, email, password } = request.body;
+
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+            const userData = {
+                ...request.body,
+                password: hashedPassword
+            };
+
+            const newUser = await dataCollection.post(userData);
+            
+                response.status(HttpStatus.CREATED).json(newUser);
         } catch (error) {
             ErrorHandler.handler(error, response);
         }
@@ -37,18 +49,19 @@ const usersController = (dataCollection: BaseCollectionUser) => {
 
     const deleteUser = async (request: Request, response: Response) => {
         try {
-            const { id } = request.params;
-            const result = await dataCollection.delete(id);
+            const body = request.body;
+            const result = await dataCollection.delete(body);
             response.status(HttpStatus.OK).json(result);
         } catch (error) {
+            console.log(error)
             ErrorHandler.handler(error, response);
         }
     }
 
     const updateUser = async (request: Request, response: Response) => {
         try {
-            const { id } = request.params;
-            const updatedUser = await dataCollection.put(id, request.body);
+            const body = request.body;
+            const updatedUser = await dataCollection.put(body);
             response.status(HttpStatus.OK).json(updatedUser);
         } catch (error) {
             ErrorHandler.handler(error, response);

@@ -1,15 +1,18 @@
 import { Router } from 'express';
 import { usersController } from './controller';
-import { BaseCollectionUser } from '../data-collection/base-collection/baseCollection';
+import { BaseCollection } from '../data-collection/base-collection/baseCollection';
+import { MongoProvider } from '../data/providers/MongoProvider';
 
-const usersWrapper = (dataCollection: BaseCollectionUser) => {
-    const { getUserById, createUser, deleteUser, updateUser, getUsers } = usersController(dataCollection);
+const usersWrapper = (dataCollection: BaseCollection) => {
+    const mongoProvider = new MongoProvider(); 
+    const controller = usersController(mongoProvider); 
+
     const userRouter = Router();
-    userRouter.get('/:id', getUserById);
-    userRouter.post('/', createUser);
-    userRouter.delete('/:id', deleteUser);
-    userRouter.put('/:id', updateUser);
-    userRouter.get('/', getUsers);
+    userRouter.get('/:id', controller.getUserById);
+    userRouter.post('/', controller.createUser);
+    userRouter.delete('/', controller.deleteUser);   
+    userRouter.put('/', controller.updateUser);
+    userRouter.get('/', controller.getUsers);
     return userRouter
 }
 
