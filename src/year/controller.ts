@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { HttpStatus } from '../utils/httpStatus';
-import { YearCollection, Year } from './year.model';
+import { YearCollection, Year } from './model';
 
 const yearController = (yearCollection: YearCollection) => {
   const getAll = async (request: Request, response: Response) => {
