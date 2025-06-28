@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { yearController } from './controller';
-import { YearCollection } from './year.model';
+import { YearCollection } from './model';
 
 const yearWrapper = (yearCollection: YearCollection) => {
   const { getAll, create, remove } = yearController(yearCollection);
