@@ -4,7 +4,7 @@ import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
-import { YearCollection } from './year/year.model';
+import { YearCollection } from './year/model';
 import { yearWrapper } from './year/yearRoutes';
 
 console.log('Development mode');
