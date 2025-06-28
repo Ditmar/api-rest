@@ -1,18 +1,19 @@
 import { Router } from 'express';
 import { usersController } from './controller';
 import { BaseCollection } from '../data-collection/base-collection/baseCollection';
-import { MongoProvider } from '../data/providers/MongoProvider';
 
 const usersWrapper = (dataCollection: BaseCollection) => {
-    const mongoProvider = new MongoProvider(); 
-    const controller = usersController(mongoProvider); 
-
+    const { getUserById, createUser, deleteUser, updateUser, getUsers } = usersController(dataCollection);
     const userRouter = Router();
-    userRouter.get('/:id', controller.getUserById);
-    userRouter.post('/', controller.createUser);
-    userRouter.delete('/', controller.deleteUser);   
-    userRouter.put('/', controller.updateUser);
-    userRouter.get('/', controller.getUsers);
+
+    const asyncHandler = (fn: any) => (req: any, res: any, next: any) =>
+        Promise.resolve(fn(req, res, next)).catch(next);
+
+    userRouter.get('/:id', asyncHandler(getUserById));
+    userRouter.post('/', asyncHandler(createUser));
+    userRouter.delete('/:id', asyncHandler(deleteUser));
+    userRouter.put('/:id', asyncHandler(updateUser));
+    userRouter.get('/', asyncHandler(getUsers));
     return userRouter
 }
 
