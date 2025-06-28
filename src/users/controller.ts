@@ -1,15 +1,16 @@
 import { Request, Response } from 'express';
-import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 import { HttpStatus } from '../utils/httpStatus';
 import { ErrorHandler } from '../utils/errorHandler';
-import bcrypt from 'bcrypt';
+import { UserRepository } from './usersRepository';
+import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 
 const usersController = (dataCollection: BaseCollection) => {
-    
+
+    const userRepo = new UserRepository();
 
     const getUsers = async (request: Request, response: Response) => {
         try {
-            const users = await dataCollection.get();
+            const users = await userRepo.getUsers();
             response.status(HttpStatus.OK).json(users);
         } catch (error) {
             ErrorHandler.handler(error, response);
@@ -19,29 +20,49 @@ const usersController = (dataCollection: BaseCollection) => {
     const getUserById = async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const user = await dataCollection.getById(id);
+            const user = await userRepo.getUserById(id);
+
+            if (!user) {
+                return response.status(HttpStatus.NOT_FOUND).json({
+                    message: 'User not found'
+                });
+            }
+
             response.status(HttpStatus.OK).json(user);
         } catch (error) {
             ErrorHandler.handler(error, response);
-
         }
     }
 
     const createUser = async (request: Request, response: Response) => {
         try {
-            const { nombre, email, password } = request.body;
+            const { email } = request.body;
 
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            if (await userRepo.emailExists(email)) {
+                return response.status(HttpStatus.BAD_REQUEST).json({
+                    message: 'Email already exists'
+                });
+            }
 
-            const userData = {
-                ...request.body,
-                password: hashedPassword
-            };
+            const newUser = await userRepo.createUser(request.body);
+            response.status(HttpStatus.CREATED).json(newUser);
+        } catch (error) {
+            ErrorHandler.handler(error, response);
+        }
+    }
 
-            const newUser = await dataCollection.post(userData);
-            
-                response.status(HttpStatus.CREATED).json(newUser);
+    const updateUser = async (request: Request, response: Response) => {
+        try {
+            const { id } = request.params;
+            const updatedUser = await userRepo.updateUser(id, request.body);
+
+            if (!updatedUser) {
+                return response.status(HttpStatus.NOT_FOUND).json({
+                    message: 'User not found'
+                });
+            }
+
+            response.status(HttpStatus.OK).json(updatedUser);
         } catch (error) {
             ErrorHandler.handler(error, response);
         }
@@ -49,24 +70,23 @@ const usersController = (dataCollection: BaseCollection) => {
 
     const deleteUser = async (request: Request, response: Response) => {
         try {
-            const body = request.body;
-            const result = await dataCollection.delete(body);
-            response.status(HttpStatus.OK).json(result);
+            const { id } = request.params;
+            const result = await userRepo.deleteUser(id);
+
+            if (result && (result as any).deletedCount === 0) {
+                return response.status(HttpStatus.NOT_FOUND).json({
+                    message: 'User not found'
+                });
+            }
+
+            response.status(HttpStatus.OK).json({
+                message: 'User deleted successfully'
+            });
         } catch (error) {
-            console.log(error)
             ErrorHandler.handler(error, response);
         }
     }
 
-    const updateUser = async (request: Request, response: Response) => {
-        try {
-            const body = request.body;
-            const updatedUser = await dataCollection.put(body);
-            response.status(HttpStatus.OK).json(updatedUser);
-        } catch (error) {
-            ErrorHandler.handler(error, response);
-        }
-    }
-    return { getUserById, createUser, deleteUser, updateUser, getUsers }
+    return { getUsers, getUserById, createUser, updateUser, deleteUser };
 }
 export { usersController };
