@@ -1,10 +1,6 @@
 {
   "name": "api-rest",
-<<<<<<< HEAD
-  "version": "1.0.4-rc.8",
-=======
-  "version": "1.0.4-rc.5",
->>>>>>> 7e227c3 (fix: update version in package.json and standardize HTTP status codes in middleware)
+  "version": "1.0.4-rc.9",
   "description": "",
   "scripts": {
     "build": "tsc",
