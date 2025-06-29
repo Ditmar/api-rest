@@ -3,8 +3,8 @@ import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
-import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
-
+import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
+import articleRoutes from './article/article.routes';
 
 console.log('Development mode');
 
@@ -20,7 +20,7 @@ class App {
   }
 
   private initCollections() {
-    this.dataCollection = DataCollectionFactory.createDataCollection('index'); // o 'mongo' o lo que uses
+    this.dataCollection = DataCollectionFactory.createDataCollection('index');
   }
 
   private initializeMiddlewares() {
@@ -33,14 +33,14 @@ class App {
       throw new Error('Data collection is not initialized');
     }
     server.use('/user', userWrapper(this.dataCollection));
+    server.use('/articles', articleRoutes);
   }
 }
 
 async function startServer() {
   try {
-   
     MongoConnection.getInstance();
-   
+
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     new App();
