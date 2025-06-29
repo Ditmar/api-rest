@@ -1,0 +1,44 @@
+### Crear un nuevo artículo (POST)
+# Esta petición enviará un nuevo artículo a tu API.
+# Asegúrate de que tu servidor (yarn dev) esté corriendo.
+# El _id en la respuesta es el ID generado por MongoDB.
+POST http://localhost:4000/articles
+Content-Type: application/json
+
+{
+  "title": "Prueba 2 Crear un nuevo articulo ",
+  "abstract": "Un estudio sobre el potencial de los organismos marinos para el desarrollo de nuevos fármacos y materiales.",
+  "authors": ["60d5ec49b2f67d0015e8b4d1", "60d5ec49b2f67d0015e8b4d2"],
+  "volume_id": "60d5ec49b2f67d0015e8b4d3",
+  "year": 2024,
+  "pdf_url": "https://midominio.com/biotec-marina.pdf",
+  "images": ["https://midominio.com/imagen_marina1.jpg", "https://midominio.com/imagen_marina2.png"]
+}
+
+### Obtener todos los artículos (GET)
+# Esta petición recuperará todos los artículos que hayas guardado.
+# Si no has creado ninguno, la respuesta será un array vacío: [].
+GET http://localhost:4000/articles
+
+### Obtener un artículo por su ID (GET)
+# Para usar esta petición, DEBES REEMPLAZAR ID_DEL_ARTICULO_AQUI
+# con un _id real de un artículo que hayas creado (lo obtienes de la respuesta POST).
+# Ejemplo de ID: 66804a1b02540d5102f4a4d5
+GET http://localhost:4000/articles/6860a5700b563a0856c0decc
+
+### Actualizar un artículo existente (PUT)
+# Para usar esta petición, DEBES REEMPLAZAR ID_DEL_ARTICULO_AQUI
+# Solo incluye los campos que deseas modificar en el cuerpo JSON.
+PUT http://localhost:4000/articles/6860a6390b563a0856c0decf
+Content-Type: application/json
+
+{
+  "title": "Biotecnología Marina: Innovaciones y Retos Globales",
+  "abstract": "Actualización del estudio con nuevos datos sobre sostenibilidad y escalabilidad.",
+  "year": 2025
+}
+
+### Eliminar un artículo (DELETE)
+# Para usar esta petición, DEBES REEMPLAZAR ID_DEL_ARTICULO_AQUI
+# Eliminará el artículo de la base de datos.
+DELETE http://localhost:4000/articles/6860a6390b563a0856c0decf
