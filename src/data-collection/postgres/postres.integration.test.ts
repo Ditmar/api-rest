@@ -1,4 +1,5 @@
 import { Postgres } from "./Postgres";
+import { describe, beforeEach, afterEach, it, expect } from "vitest"; // Changed import
 
 describe("Postgres Connection Provider (Integration)", () => {
   let postgres: Postgres;

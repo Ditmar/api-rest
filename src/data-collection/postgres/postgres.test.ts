@@ -1,19 +1,20 @@
 import { Postgres } from "./Postgres";
 import { Sequelize } from "@sequelize/core";
+import { vi, describe, beforeEach, it, expect } from "vitest";
 
-jest.mock("@sequelize/core", () => {
+vi.mock("@sequelize/core", () => {
   const mSequelize = {
-    authenticate: jest.fn().mockResolvedValue(undefined),
-    close: jest.fn().mockResolvedValue(undefined),
+    authenticate: vi.fn().mockResolvedValue(undefined),
+    close: vi.fn().mockResolvedValue(undefined),
   };
   return {
-    Sequelize: jest.fn(() => mSequelize),
-    Model: jest.fn(),
+    Sequelize: vi.fn(() => mSequelize),
+    Model: vi.fn(),
   };
 });
 
-jest.mock("@sequelize/postgres", () => ({
-  PostgresDialect: jest.fn(),
+vi.mock("@sequelize/postgres", () => ({
+  PostgresDialect: vi.fn(),
 }));
 
 describe("Postgres Connection Provider", () => {
@@ -21,7 +22,7 @@ describe("Postgres Connection Provider", () => {
 
   beforeEach(() => {
     postgres = new Postgres();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should connect and set the client", async () => {

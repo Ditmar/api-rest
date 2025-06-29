@@ -7,14 +7,15 @@
     "start": "yarn build && node ./dist/App.js",
     "dev": "nodemon",
     "lint": "eslint src/**/*.ts",
+    "test": "vitest run",
     "db:start:local": "docker-compose -f ./dev-database/dev-database.yml up -d",
     "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sequelize/core": "^7.0.0-alpha.46",
-    "@sequelize/postgres": "^7.0.0-alpha.46",
+    "@sequelize/core": "7.0.0-alpha.46",
+    "@sequelize/postgres": "7.0.0-alpha.46",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongodb": "^6.16.0",
@@ -26,13 +27,12 @@
   "devDependencies": {
     "@eslint/js": "^9.26.0",
     "@types/express": "^5.0.1",
-    "@types/jest": "^29.5.14",
     "eslint": "^9.26.0",
     "globals": "^16.1.0",
     "nodemon": "^3.1.10",
     "tsc": "^2.0.4",
-    "ts-jest": "^29.3.4",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.32.0"
+    "typescript-eslint": "^8.32.0",
+    "vitest": "3.2.4"
   }
 }
