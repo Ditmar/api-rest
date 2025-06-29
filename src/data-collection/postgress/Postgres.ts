@@ -21,9 +21,5 @@ class Postgres extends BaseCollection {
     throw new Error("getById not implemented in PokeApi");
   }
 
-  async postArticle(body: unknown): Promise<unknown> {
-    throw new Error("postArticle not implemented in PokeApi");
-  }
-
 }
 export { Postgres }

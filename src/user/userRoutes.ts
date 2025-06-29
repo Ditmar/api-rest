@@ -3,17 +3,15 @@ import { userController } from './controller';
 import { BaseCollection } from '../data-collection/base-collection/baseCollection';
 
 const userWrapper = (dataCollection: BaseCollection) => {
-  const { get, getById, post, put, deleteUser, postArticle } = userController(dataCollection);
-  const router = Router();
+  const { get, post, deleteUser, put } = userController(dataCollection);
+  const userRouter = Router();
 
-  router.get('/', get);
-  router.get('/:id', getById);
-  router.post('/', post);
-  router.put('/:id', put);              
-  router.delete('/:id', deleteUser);
-  router.post('/article', postArticle);
+  userRouter.get('/', get);
+  userRouter.post('/', post);
+  userRouter.delete('/', deleteUser);
+  userRouter.put('/', put);
 
-  return router;
+  return userRouter;
 };
 
 export { userWrapper };
