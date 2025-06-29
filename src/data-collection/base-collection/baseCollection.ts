@@ -5,5 +5,4 @@ export abstract class BaseCollection {
   abstract put(body: any): Promise<unknown>;
 
   abstract getById(id: string): Promise<unknown>;
-  abstract postArticle(body: unknown): Promise<unknown>;
 }

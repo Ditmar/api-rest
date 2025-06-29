@@ -1,6 +1,7 @@
 import express from 'express';
 import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
+import { indexesWrapper } from './Indexes/routes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
@@ -20,7 +21,8 @@ class App {
   }
 
   private initCollections() {
-    this.dataCollection = DataCollectionFactory.createDataCollection('index'); // o 'mongo' o lo que uses
+    this.dataCollection = DataCollectionFactory.createDataCollection('mongo'); 
+    this.dataCollection = DataCollectionFactory.createDataCollection('indexes');
   }
 
   private initializeMiddlewares() {
@@ -33,6 +35,7 @@ class App {
       throw new Error('Data collection is not initialized');
     }
     server.use('/user', userWrapper(this.dataCollection));
+    server.use('/indexes', indexesWrapper(this.dataCollection));
   }
 }
 
