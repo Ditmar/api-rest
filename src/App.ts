@@ -1,12 +1,11 @@
-import express from 'express';
-import { ConfigSingleton } from './config/config';
-import { userWrapper } from './user/userRoutes';
-import { DataCollectionFactory } from './data-collection/factory';
-import { BaseCollection } from './data-collection/base-collection/baseCollection';
-import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
+import express from "express";
+import { ConfigSingleton } from "./config/config";
+import { userWrapper } from "./user/userRoutes";
+import { DataCollectionFactory } from "./data-collection/factory";
+import { BaseCollection } from "./data-collection/base-collection/baseCollection";
+import { MongoClient as MongoConnection } from "./data-collection/mongo/mongo-client";
 
-
-console.log('Development mode');
+console.log("Development mode");
 
 const server = express();
 
@@ -20,7 +19,7 @@ class App {
   }
 
   private initCollections() {
-    this.dataCollection = DataCollectionFactory.createDataCollection('index'); // o 'mongo' o lo que uses
+    this.dataCollection = DataCollectionFactory.createDataCollection("index"); // o 'mongo' o lo que uses
   }
 
   private initializeMiddlewares() {
@@ -30,25 +29,26 @@ class App {
 
   private initializeRoutes() {
     if (!this.dataCollection) {
-      throw new Error('Data collection is not initialized');
+      throw new Error("Data collection is not initialized");
     }
-    server.use('/user', userWrapper(this.dataCollection));
+    server.use("/user", userWrapper(this.dataCollection));
   }
 }
 
 async function startServer() {
   try {
-   
     MongoConnection.getInstance();
-   
-    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     new App();
     server.listen(ConfigSingleton.getInstance().PORT, () => {
-      console.log(`Server is running on port ${ConfigSingleton.getInstance().PORT}`);
+      console.log(
+        `Server is running on port ${ConfigSingleton.getInstance().PORT}`
+      );
     });
   } catch (error) {
-    console.error('Error starting server:', error);
+    console.error("Error starting server:", error);
   }
 }
 
