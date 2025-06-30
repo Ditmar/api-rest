@@ -42,4 +42,4 @@ class YearCollection extends BaseCollection {
   }
 }
 
-export { YearCollection, Year };
+export { YearCollection };
