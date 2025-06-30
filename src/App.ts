@@ -13,7 +13,7 @@ import { articlesWrapper } from './articles/routes';
 import { ArticleModel } from './articles/models';
 =======
 import { userWrapper } from './user/userRoutes';
-import { authorRoute } from './routes/author.route';
+import { authorRoute } from './routes/author';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
