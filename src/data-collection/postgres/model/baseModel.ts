@@ -2,7 +2,7 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
-} from "@sequelize/core";
+} from '@sequelize/core';
 
 export class BaseModel extends Model<
   InferAttributes<BaseModel>,
