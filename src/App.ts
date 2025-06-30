@@ -1,9 +1,10 @@
 import express from 'express';
 import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
+import { authorRoute } from './routes/author.route';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
-import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
+import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
 
 
 console.log('Development mode');
@@ -33,14 +34,15 @@ class App {
       throw new Error('Data collection is not initialized');
     }
     server.use('/user', userWrapper(this.dataCollection));
+    server.use('/authors', authorRoute());
   }
 }
 
 async function startServer() {
   try {
-   
+
     MongoConnection.getInstance();
-   
+
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     new App();
