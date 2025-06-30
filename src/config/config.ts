@@ -27,7 +27,7 @@ class ConfigSingleton {
             PORT: z.coerce.number().default(3000),
             NODE_ENV: z.enum(['development', 'production']).default('development'),
             URL_BASE_POKE_API: z.string().url(),
-            VERSION: z.coerce.number().gte(1000).lte(9999),
+            VERSION: z.string(),
             MONGO_INITDB_ROOT_USERNAME: z.string().min(1),
             MONGO_INITDB_ROOT_PASSWORD: z.string().min(1),
             POSTGRES_USER: z.string().min(1),
