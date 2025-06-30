@@ -4,6 +4,7 @@ import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
+import { bibliographyRoute } from './routes/bibliography';
 
 
 console.log('Development mode');
@@ -33,6 +34,8 @@ class App {
       throw new Error('Data collection is not initialized');
     }
     server.use('/user', userWrapper(this.dataCollection));
+
+    server.use('/bibliography', bibliographyRoute());
   }
 }
 
