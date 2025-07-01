@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { HttpStatus } from '../utils/httpStatus';
-import { YearCollection, Year } from './model';
+import { YearCollection } from './model';
 
 const yearController = (yearCollection: YearCollection) => {
   const getAll = async (request: Request, response: Response) => {
@@ -9,7 +9,7 @@ const yearController = (yearCollection: YearCollection) => {
       const sortedYears = years.sort((a, b) => a.year - b.year);
       response.status(HttpStatus.OK).json(sortedYears);
     } catch (error) {
-      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch years' });
+      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error instanceof Error ? error.message : 'Failed to fetch years' });
     }
   };
 
@@ -25,7 +25,7 @@ const yearController = (yearCollection: YearCollection) => {
       const result = await yearCollection.createYear({ year });
       response.status(HttpStatus.CREATED).json(result);
     } catch (error) {
-      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create year' });
+      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error instanceof Error ? error.message : 'Failed to create years' });
     }
   };
 
@@ -46,8 +46,8 @@ const yearController = (yearCollection: YearCollection) => {
       } else {
         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete year' });
       }
-    } catch (error: any) {
-      if (error.message.includes('associated articles')) {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message.includes('associated articles')) {
         response.status(HttpStatus.FORBIDDEN).json({ error: error.message });
       } else {
         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete year' });
