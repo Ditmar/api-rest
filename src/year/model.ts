@@ -5,6 +5,21 @@ export interface Year {
 }
 
 class YearCollection extends BaseCollection {
+  post(): Promise<unknown> {
+    throw new Error('Method not implemented.');
+  }
+  delete(): Promise<unknown> {
+    throw new Error('Method not implemented.');
+  }
+  put(): Promise<unknown> {
+    throw new Error('Method not implemented.');
+  }
+  getById(): Promise<unknown> {
+    throw new Error('Method not implemented.');
+  }
+  postArticle(): Promise<unknown> {
+    throw new Error('Method not implemented.');
+  }
   get(): Promise<Year[]> {
     return this.getAllYears();
   }
