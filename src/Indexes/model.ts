@@ -2,7 +2,6 @@ import { BaseCollection } from "../data-collection/base-collection/baseCollectio
 import { MongoClient } from "../data-collection/mongo/mongo-client";
 import { ObjectId } from "mongodb";
 
-
 interface Indexes {
   id?: string;
   title: string;
@@ -24,7 +23,7 @@ class IndexModel extends BaseCollection {
     return /^[0-9a-fA-F]{24}$/.test(id);
   }
 
-  async get() {
+  async get(): Promise<unknown> {
     return await this.client
       .db()
       .collection("indexes")
@@ -33,7 +32,7 @@ class IndexModel extends BaseCollection {
       .toArray();
   }
 
-  async getById(id: string) {
+  async getById(id: string): Promise<unknown> {
     if (!this.isValidObjectId(id)) {
       throw new Error("Invalid ID format");
     }
@@ -44,8 +43,8 @@ class IndexModel extends BaseCollection {
       .findOne({ _id: new ObjectId(id) });
   }
 
-  async post(body: Indexes) {
-    const { title, description, articles, position, visible } = body;
+  async post(body: unknown): Promise<unknown> {
+    const { title, description, articles, position, visible } = body as Indexes;
 
     if (!Array.isArray(articles) || !articles.every(this.isValidObjectId)) {
       throw new Error("Articles must be an array of valid ObjectId strings");
@@ -72,8 +71,8 @@ class IndexModel extends BaseCollection {
     });
   }
 
-  async put(body: Partial<Indexes> & { id: string }) {
-    const { id, articles, ...rest } = body;
+  async put(body: unknown): Promise<unknown> {
+    const { id, articles, ...rest } = body as Partial<Indexes> & { id: string };
 
     if (!this.isValidObjectId(id)) {
       throw new Error("Invalid ID format");
@@ -107,8 +106,8 @@ class IndexModel extends BaseCollection {
       .updateOne({ _id: new ObjectId(id) }, { $set: updateFields });
   }
 
-  async delete(body: { id: string }) {
-    const { id } = body;
+  async delete(body: unknown): Promise<unknown> {
+    const { id } = body as { id: string };
 
     if (!this.isValidObjectId(id)) {
       throw new Error("Invalid ID format");
@@ -119,6 +118,12 @@ class IndexModel extends BaseCollection {
       .collection("indexes")
       .deleteOne({ _id: new ObjectId(id) });
   }
+
+  async postArticle(_body: unknown): Promise<unknown> {
+  void _body;
+  throw new Error("Method not implemented in IndexModel");
+}
+
 }
 
 export { IndexModel };
