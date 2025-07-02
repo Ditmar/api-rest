@@ -2,6 +2,8 @@ import express from 'express';
 import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
 import { indexesWrapper } from './Indexes/routes';
+import { yearWrapper } from './year/yearRoutes'; 
+import { YearCollection } from './year/model'; 
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
