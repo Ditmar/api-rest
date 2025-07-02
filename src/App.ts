@@ -11,11 +11,12 @@ import { indexesWrapper } from './indexes/routes'
 
 console.log('Development mode');
 
-const server = express(); // 
+const server = express();
 
 class App {
   private dataCollection: BaseCollection | null = null;
-  private articleCollection: BaseCollection | null = null; 
+  private articleCollection: BaseCollection | null = null;
+  private yearCollection: YearCollection | null = null; 
 
   constructor() {
     this.initializeMiddlewares();
@@ -25,7 +26,8 @@ class App {
 
   private initCollections() {
     this.dataCollection = DataCollectionFactory.createDataCollection('index'); 
-    this.articleCollection = new ArticleModel();
+    this.articleCollection = new ArticleModel(); 
+    this.yearCollection = new YearCollection(); 
   }
 
   private initializeMiddlewares() {
@@ -37,8 +39,11 @@ class App {
     if (!this.dataCollection) {
       throw new Error('Data collection (index) no está inicializada');
     }
-    if (!this.articleCollection) { 
+    if (!this.articleCollection) {
       throw new Error('La colección de artículos no está inicializada');
+    }
+    if (!this.yearCollection) { 
+      throw new Error('La colección de años no está inicializada');
     }
 
     server.use('/user', userWrapper(this.dataCollection));
@@ -52,9 +57,7 @@ class App {
 async function startServer() {
   try {
     const config = ConfigSingleton.getInstance();
-    
-    MongoConnection.getInstance(); 
-
+   
     console.log('Conectado a MongoDB'); 
 
     new App();
