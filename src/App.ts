@@ -6,6 +6,7 @@ import { BaseCollection } from './data-collection/base-collection/baseCollection
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
 import { YearCollection } from './year/model';
 import { yearWrapper } from './year/yearRoutes';
+import { usersWrapper } from './users/usersRoutes';
 
 console.log('Development mode');
 
@@ -35,6 +36,8 @@ class App {
     }
     server.use('/user', userWrapper(this.dataCollection));
     server.use('/year', yearWrapper(new YearCollection()));
+    server.use('/users', usersWrapper(this.dataCollection));
+
   }
 }
 

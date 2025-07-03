@@ -1,6 +1,6 @@
 {
   "name": "api-rest",
-  "version": "1.0.5-rc.37",
+  "version": "1.0.5-rc.9",
   "description": "",
   "scripts": {
     "build": "tsc",
@@ -16,6 +16,7 @@
   "dependencies": {
     "@sequelize/core": "7.0.0-alpha.46",
     "@sequelize/postgres": "7.0.0-alpha.46",
+    "bcrypt": "6.0.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.10",
     "eslint": "^9.26.0",
