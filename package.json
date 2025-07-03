@@ -1,14 +1,6 @@
 {
   "name": "api-rest",
-<<<<<<< HEAD
-<<<<<<< HEAD
   "version": "1.0.5-rc.35",
-=======
-  "version": "1.0.5-rc.31",
->>>>>>> c31c0fa (update version)
-=======
-  "version": "1.0.5-rc.35",
->>>>>>> 8e85590 (update version)
   "description": "",
   "scripts": {
     "build": "tsc",
@@ -39,7 +31,6 @@
     "@types/pg": "^8.15.4",
     "eslint": "^9.26.0",
     "globals": "^16.1.0",
-    "jq": "^1.7.2",
     "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.10",
     "pg": "^8.16.3",
