@@ -7,7 +7,7 @@ import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-cl
 import { YearCollection } from './year/model';
 import { yearWrapper } from './year/yearRoutes';
 import { usersWrapper } from './users/usersRoutes';
-import { indexesWrapper } from './Indexes/routes'
+import { indexesWrapper } from './indexes/routes'
 
 console.log('Development mode');
 
