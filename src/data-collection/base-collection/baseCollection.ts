@@ -7,3 +7,10 @@ export abstract class BaseCollection {
   abstract getById(id: string): Promise<unknown>;
   abstract postArticle(body: unknown): Promise<unknown>;
 }
+
+export abstract class BaseCollectionPdf {
+    abstract get(id: string): Promise<unknown>;
+    abstract post(file: any): Promise<unknown>;
+    abstract delete(id: string): Promise<unknown>;
+    abstract getDownloadUrl(id: string): Promise<string>;
+}

@@ -2,12 +2,14 @@ import express from 'express';
 import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
-import { BaseCollection } from './data-collection/base-collection/baseCollection';
+import { BaseCollection, BaseCollectionPdf } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
 import { YearCollection } from './year/model';
 import { yearWrapper } from './year/yearRoutes';
 import { usersWrapper } from './users/usersRoutes';
 import { indexesWrapper } from './indexes/routes'
+import {pdfWrapper } from './gestion-pdf/pdfRoutes'
+import { MongoPdf } from './data-collection/mongo/Mongo-pdf'
 
 console.log('Development mode');
 
@@ -15,6 +17,7 @@ const server = express();
 
 class App {
   private dataCollection: BaseCollection | null = null;
+  private dataPdfCollection: BaseCollectionPdf | null = null;
 
   constructor() {
     this.initializeMiddlewares();
@@ -23,6 +26,7 @@ class App {
   }
 
   private initCollections() {
+    this.dataPdfCollection =  new MongoPdf();
     this.dataCollection = DataCollectionFactory.createDataCollection('index');
   }
 
@@ -39,6 +43,7 @@ class App {
     server.use('/year', yearWrapper(new YearCollection()));
     server.use('/users', usersWrapper(this.dataCollection));
     server.use('/indexes', indexesWrapper(this.dataCollection));
+    server.use('/files', pdfWrapper(this.dataPdfCollection as any));
 
   }
 }
