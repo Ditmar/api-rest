@@ -3,7 +3,7 @@ import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes'; 
 import { authorRoute } from './routes/author';
 import { DataCollectionFactory } from './data-collection/factory';
-import { BaseCollection } from './data-collection/base-collection/baseCollection';
+import { BaseCollection, BaseCollectionPdf } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
 import { YearCollection } from './year/model';
 import { yearWrapper } from './year/yearRoutes';
@@ -29,6 +29,7 @@ class App {
   }
 
   private initCollections() {
+    this.dataPdfCollection =  new MongoPdf();
     this.dataCollection = DataCollectionFactory.createDataCollection('index');
     this.articleCollection = new ArticleModel(); 
     this.yearCollection = new YearCollection(); 

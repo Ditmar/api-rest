@@ -20,7 +20,8 @@ class ConfigSingleton {
         JWT_ALGORITHM: 'HS256' | 'RS256';
         JWT_ISSUER: string;
         JWT_AUDIENCE: string;
-
+        BASE_URL: string;
+        MAX_FILE_SIZE: number;
     } | null = null;
     private static createSchema() {
         const configSchema = z.object({
@@ -41,6 +42,8 @@ class ConfigSingleton {
             JWT_ALGORITHM: z.enum(['HS256', 'RS256']),
             JWT_ISSUER: z.string().min(1),
             JWT_AUDIENCE: z.string().min(1),
+            BASE_URL: z.string().url().default('http://localhost:3000'),
+            MAX_FILE_SIZE: z.coerce.number().default(5 * 1024 * 1024),
         });
 
         const parsed = configSchema.safeParse(process.env);
