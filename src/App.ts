@@ -1,6 +1,6 @@
 import express from 'express';
 import { ConfigSingleton } from './config/config';
-import { userWrapper } from './user/userRoutes';
+import { userWrapper } from './user/userRoutes'; 
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
@@ -16,7 +16,7 @@ const server = express();
 class App {
   private dataCollection: BaseCollection | null = null;
   private articleCollection: BaseCollection | null = null;
-  private yearCollection: YearCollection | null = null; 
+  private yearCollection: YearCollection | null = null;
 
   constructor() {
     this.initializeMiddlewares();
@@ -25,7 +25,7 @@ class App {
   }
 
   private initCollections() {
-    this.dataCollection = DataCollectionFactory.createDataCollection('index'); 
+    this.dataCollection = DataCollectionFactory.createDataCollection('index');
     this.articleCollection = new ArticleModel(); 
     this.yearCollection = new YearCollection(); 
   }
@@ -42,7 +42,7 @@ class App {
     if (!this.articleCollection) {
       throw new Error('La colección de artículos no está inicializada');
     }
-    if (!this.yearCollection) { 
+    if (!this.yearCollection) {
       throw new Error('La colección de años no está inicializada');
     }
 
@@ -57,7 +57,9 @@ class App {
 async function startServer() {
   try {
     const config = ConfigSingleton.getInstance();
-   
+    
+    MongoConnection.getInstance(); 
+
     console.log('Conectado a MongoDB'); 
 
     new App();
