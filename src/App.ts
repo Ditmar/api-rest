@@ -8,6 +8,8 @@ import { YearCollection } from './year/model';
 import { yearWrapper } from './year/yearRoutes';
 import { usersWrapper } from './users/usersRoutes';
 import { indexesWrapper } from './indexes/routes'
+import { articlesWrapper } from './articles/routes'; 
+import { ArticleModel } from './articles/models';
 
 console.log('Development mode');
 
@@ -50,7 +52,7 @@ class App {
     server.use('/year', yearWrapper(new YearCollection()));
     server.use('/users', usersWrapper(this.dataCollection));
     server.use('/indexes', indexesWrapper(this.dataCollection));
-
+    server.use('/articles', articlesWrapper(this.articleCollection));
   }
 }
 
