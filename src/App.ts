@@ -12,7 +12,7 @@ import { indexesWrapper } from './indexes/routes'
 import { articlesWrapper } from './articles/routes'; 
 import { ArticleModel } from './articles/models';
 import { bibliographyRoute } from './routes/bibliography';
-import { imageWrapper } from './GestionImages/imageRoutes';
+import { imageWrapper } from './ManagementImages/imageRoutes';
 
 console.log('Development mode');
 
