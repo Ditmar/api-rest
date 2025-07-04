@@ -4,7 +4,7 @@ import { userWrapper } from './user/userRoutes';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client'; 
-import { imageWrapper } from './GestionImages/imageRoutes';
+import { imageWrapper } from './ManagementImages/imageRoutes';
 
 console.log('Development mode');
 
