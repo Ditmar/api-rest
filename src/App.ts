@@ -1,6 +1,6 @@
 import express from 'express';
 import { ConfigSingleton } from './config/config';
-import { userWrapper } from './user/userRoutes';
+import { userWrapper } from './user/userRoutes'; 
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
@@ -8,6 +8,8 @@ import { YearCollection } from './year/model';
 import { yearWrapper } from './year/yearRoutes';
 import { usersWrapper } from './users/usersRoutes';
 import { indexesWrapper } from './indexes/routes'
+import { articlesWrapper } from './articles/routes'; 
+import { ArticleModel } from './articles/models';
 
 console.log('Development mode');
 
@@ -15,6 +17,8 @@ const server = express();
 
 class App {
   private dataCollection: BaseCollection | null = null;
+  private articleCollection: BaseCollection | null = null;
+  private yearCollection: YearCollection | null = null;
 
   constructor() {
     this.initializeMiddlewares();
@@ -24,6 +28,8 @@ class App {
 
   private initCollections() {
     this.dataCollection = DataCollectionFactory.createDataCollection('index');
+    this.articleCollection = new ArticleModel(); 
+    this.yearCollection = new YearCollection(); 
   }
 
   private initializeMiddlewares() {
@@ -33,21 +39,30 @@ class App {
 
   private initializeRoutes() {
     if (!this.dataCollection) {
-      throw new Error('Data collection is not initialized');
+      throw new Error('Data collection (index) no está inicializada');
     }
+    if (!this.articleCollection) {
+      throw new Error('La colección de artículos no está inicializada');
+    }
+    if (!this.yearCollection) {
+      throw new Error('La colección de años no está inicializada');
+    }
+
     server.use('/user', userWrapper(this.dataCollection));
     server.use('/year', yearWrapper(new YearCollection()));
     server.use('/users', usersWrapper(this.dataCollection));
     server.use('/indexes', indexesWrapper(this.dataCollection));
-
+    server.use('/articles', articlesWrapper(this.articleCollection));
   }
 }
 
 async function startServer() {
   try {
-    MongoConnection.getInstance();
+    const config = ConfigSingleton.getInstance();
+    
+    MongoConnection.getInstance(); 
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log('Conectado a MongoDB'); 
 
     new App();
     server.listen(ConfigSingleton.getInstance().PORT, () => {
@@ -56,7 +71,8 @@ async function startServer() {
       );
     });
   } catch (error) {
-    console.error('Error starting server:', error);
+    console.error('Fallo al iniciar el servidor:', error);
+    process.exit(1); 
   }
 }
 
