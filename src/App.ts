@@ -60,7 +60,7 @@ class App {
 
 async function startServer() {
   try {
-    const config = ConfigSingleton.getInstance();
+    ConfigSingleton.getInstance();
     
     MongoConnection.getInstance(); 
 
