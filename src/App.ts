@@ -1,7 +1,7 @@
 import express from 'express';
 import { ConfigSingleton } from './config/config';
-<<<<<<< HEAD
 import { userWrapper } from './user/userRoutes'; 
+import { authorRoute } from './routes/author';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
@@ -11,14 +11,6 @@ import { usersWrapper } from './users/usersRoutes';
 import { indexesWrapper } from './indexes/routes'
 import { articlesWrapper } from './articles/routes'; 
 import { ArticleModel } from './articles/models';
-=======
-import { userWrapper } from './user/userRoutes';
-import { authorRoute } from './routes/author';
-import { DataCollectionFactory } from './data-collection/factory';
-import { BaseCollection } from './data-collection/base-collection/baseCollection';
-import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
-
->>>>>>> 270bc68 (feat: Add authors management functionality with CRUD operations)
 
 console.log('Development mode');
 
@@ -58,31 +50,23 @@ class App {
     }
 
     server.use('/user', userWrapper(this.dataCollection));
-<<<<<<< HEAD
     server.use('/year', yearWrapper(new YearCollection()));
     server.use('/users', usersWrapper(this.dataCollection));
     server.use('/indexes', indexesWrapper(this.dataCollection));
     server.use('/articles', articlesWrapper(this.articleCollection));
-=======
     server.use('/authors', authorRoute());
->>>>>>> 270bc68 (feat: Add authors management functionality with CRUD operations)
   }
 }
 
 async function startServer() {
   try {
-<<<<<<< HEAD
     const config = ConfigSingleton.getInstance();
     
     MongoConnection.getInstance(); 
 
     console.log('Conectado a MongoDB'); 
-=======
-
-    MongoConnection.getInstance();
-
+    
     await new Promise(resolve => setTimeout(resolve, 2000));
->>>>>>> 270bc68 (feat: Add authors management functionality with CRUD operations)
 
     new App();
     server.listen(ConfigSingleton.getInstance().PORT, () => {
