@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { CreationAttributes, Sequelize } from '@sequelize/core';
 import { PostgresDialect } from '@sequelize/postgres';
 import { BaseModel } from './model/baseModel';
+import { DataTypes } from '@sequelize/core';
 
 dotenv.config();
 
@@ -33,8 +34,24 @@ class Postgres extends BaseCollection {
         port: parseInt(process.env.PGPORT || '5432', 10),
         ssl: process.env.PGSSL === 'true' ? true : false,
         clientMinMessages: 'notice',
-        models: [BaseModel],
       });
+
+      if (!BaseModel.isInitialized) {
+        BaseModel.init(
+          {
+            id: {
+              type: DataTypes.INTEGER,
+              autoIncrement: true,
+              primaryKey: true,
+            },
+          },
+          {
+            sequelize,
+            tableName: 'base_model',
+            timestamps: false,
+          }
+        );
+      }
 
       await sequelize.authenticate();
       this.client = sequelize;

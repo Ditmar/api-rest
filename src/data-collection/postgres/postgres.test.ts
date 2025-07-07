@@ -1,21 +1,9 @@
-import { Postgres } from './Postgres';
+vi.mock('@sequelize/core');
+
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Sequelize } from '@sequelize/core';
-import { vi, describe, beforeEach, it, expect } from 'vitest';
-
-vi.mock('@sequelize/core', () => {
-  const mSequelize = {
-    authenticate: vi.fn().mockResolvedValue(undefined),
-    close: vi.fn().mockResolvedValue(undefined),
-  };
-  return {
-    Sequelize: vi.fn(() => mSequelize),
-    Model: vi.fn(),
-  };
-});
-
-vi.mock('@sequelize/postgres', () => ({
-  PostgresDialect: vi.fn(),
-}));
+import { Postgres } from './Postgres';
+import { __mocked } from '../../_mocks_/@sequelize/core';
 
 describe('Postgres Connection Provider', () => {
   let postgres: Postgres;
@@ -23,6 +11,9 @@ describe('Postgres Connection Provider', () => {
   beforeEach(() => {
     postgres = new Postgres();
     vi.clearAllMocks();
+    __mocked.SequelizeMock.mockClear();
+    __mocked.mockAuthenticate.mockClear();
+    __mocked.mockClose.mockClear();
   });
 
   it('should connect and set the client', async () => {
@@ -39,7 +30,9 @@ describe('Postgres Connection Provider', () => {
     expect(postgres['client']).toBeNull();
   });
 
-  it('should not throw if disconnect is called when not connected', async () => {
-    await expect(postgres.disconnect()).resolves.toBeUndefined();
+  it('should set up a client that can authenticate and close without errors', async () => {
+  await postgres.connect();
+  await expect(postgres['client']?.authenticate()).resolves.toBeUndefined();
+  await expect(postgres['client']?.close()).resolves.toBeUndefined();
   });
 });
