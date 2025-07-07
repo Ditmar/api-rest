@@ -1,6 +1,6 @@
 {
   "name": "api-rest",
-  "version": "1.0.4-rc.62",
+  "version": "1.0.15-rc.9",
   "description": "",
   "scripts": {
     "build": "tsc",
@@ -21,6 +21,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
+    "multer": "^2.0.1",
+    "uuid": "^11.1.0",
     "zod": "^3.24.4"
   },
   "engines": {
@@ -31,6 +33,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
     "eslint": "^9.26.0",
     "globals": "^16.1.0",
     "nodemon": "^3.1.10",

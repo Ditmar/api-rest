@@ -3,7 +3,7 @@ import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes'; 
 import { authorRoute } from './routes/author';
 import { DataCollectionFactory } from './data-collection/factory';
-import { BaseCollection } from './data-collection/base-collection/baseCollection';
+import { BaseCollection, BaseCollectionPdf } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
 import { YearCollection } from './year/model';
 import { yearWrapper } from './year/yearRoutes';
@@ -12,6 +12,8 @@ import { indexesWrapper } from './indexes/routes'
 import { articlesWrapper } from './articles/routes'; 
 import { ArticleModel } from './articles/models';
 import { bibliographyRoute } from './routes/bibliography';
+import { MongoPdf } from './data-collection/mongo/Mongo-pdf';
+import { pdfWrapper } from './gestion-pdf/pdfRoutes';
 
 console.log('Development mode');
 
@@ -21,6 +23,7 @@ class App {
   private dataCollection: BaseCollection | null = null;
   private articleCollection: BaseCollection | null = null;
   private yearCollection: YearCollection | null = null;
+  private dataPdfCollection:BaseCollectionPdf | null = null;
 
   constructor() {
     this.initializeMiddlewares();
@@ -29,6 +32,7 @@ class App {
   }
 
   private initCollections() {
+    this.dataPdfCollection =  new MongoPdf();
     this.dataCollection = DataCollectionFactory.createDataCollection('index');
     this.articleCollection = new ArticleModel(); 
     this.yearCollection = new YearCollection(); 
@@ -57,6 +61,8 @@ class App {
     server.use('/articles', articlesWrapper(this.articleCollection));
     server.use('/authors', authorRoute());
     server.use('/bibliography', bibliographyRoute());
+    server.use('/files', pdfWrapper(this.dataPdfCollection as any));
+
   }
 }
 
