@@ -11,6 +11,7 @@ import { usersWrapper } from './users/usersRoutes';
 import { indexesWrapper } from './indexes/routes'
 import { articlesWrapper } from './articles/routes'; 
 import { ArticleModel } from './articles/models';
+import { bibliographyRoute } from './routes/bibliography';
 
 console.log('Development mode');
 
@@ -55,6 +56,7 @@ class App {
     server.use('/indexes', indexesWrapper(this.dataCollection));
     server.use('/articles', articlesWrapper(this.articleCollection));
     server.use('/authors', authorRoute());
+    server.use('/bibliography', bibliographyRoute());
   }
 }
 
