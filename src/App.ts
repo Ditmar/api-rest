@@ -1,6 +1,7 @@
 import express from 'express';
 import { ConfigSingleton } from './config/config';
 import { userWrapper } from './user/userRoutes'; 
+import { authorRoute } from './routes/author';
 import { DataCollectionFactory } from './data-collection/factory';
 import { BaseCollection } from './data-collection/base-collection/baseCollection';
 import { MongoClient as MongoConnection } from './data-collection/mongo/mongo-client';
@@ -53,6 +54,7 @@ class App {
     server.use('/users', usersWrapper(this.dataCollection));
     server.use('/indexes', indexesWrapper(this.dataCollection));
     server.use('/articles', articlesWrapper(this.articleCollection));
+    server.use('/authors', authorRoute());
   }
 }
 
@@ -63,6 +65,8 @@ async function startServer() {
     MongoConnection.getInstance(); 
 
     console.log('Conectado a MongoDB'); 
+    
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     new App();
     server.listen(ConfigSingleton.getInstance().PORT, () => {
