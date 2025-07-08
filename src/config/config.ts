@@ -44,7 +44,7 @@ class ConfigSingleton {
             JWT_ISSUER: z.string().min(1),
             JWT_AUDIENCE: z.string().min(1),
             MAX_IMAGE_SIZE_MB: z.coerce.number().default(5),
-            ALLOWED_EXTENSIONS: z.string().default('.jpg,.jpeg,.png,.gif'),
+            ALLOWED_EXTENSIONS: z.string().default('.jpg,.jpeg,.png,.gif'), 
 
 });
           const parsed = configSchema.safeParse(process.env);
