@@ -13,14 +13,14 @@ import {
 
 const storage = multer.diskStorage({
   destination: './uploads',
-  filename: generateUniqueFilename, // ✅ modularizado repeti
+  filename: generateUniqueFilename, 
 });
 
 const upload = multer({
   storage,
-  limits: { fileSize: ConfigSingleton.maxImageSizeBytes }, //repeti esto
+  limits: { fileSize: ConfigSingleton.maxImageSizeBytes }, 
   fileFilter: (_, file, cb) => {
-    const allowedExt = ConfigSingleton.allowedExtensions; //cambie esto
+    const allowedExt = ConfigSingleton.allowedExtensions; 
     const ext = path.extname(file.originalname).toLowerCase();
     const mimetypeOK = file.mimetype.startsWith('image/');
 
