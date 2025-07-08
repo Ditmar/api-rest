@@ -4,6 +4,7 @@ import {
   getImageById,
   deleteImageById,
 } from '../services/images.service';
+import { ConfigSingleton } from '../../config/config';
 
 export const uploadImage = (req: Request, res: Response): void => {
   const file = req.file as Express.Multer.File;
@@ -19,10 +20,10 @@ export const uploadImage = (req: Request, res: Response): void => {
     return;
   }
 
-  if (file.size > 5 * 1024 * 1024) {
-    res.status(400).json({ message: 'File too large (max 5MB)' });
-    return;
-  }
+  if (file.size > ConfigSingleton.maxImageSizeBytes) {
+  res.status(400).json({ message: 'File too large (max 5MB)' });
+  return;
+}
 
   const image = saveImage(file);
   res.status(201).json(image);

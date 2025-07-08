@@ -6,18 +6,21 @@ import {
   getImage,
   deleteImage,
 } from './controllers/images.controller';
+import { ConfigSingleton } from '../config/config'; 
+import {
+  generateUniqueFilename,
+} from '../utils/multerUtils';
 
 const storage = multer.diskStorage({
   destination: './uploads',
-  filename: (_, file, cb) =>
-    cb(null, `${Date.now()}${path.extname(file.originalname)}`),
+  filename: generateUniqueFilename, // ✅ modularizado repeti
 });
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, 
+  limits: { fileSize: ConfigSingleton.maxImageSizeBytes }, //repeti esto
   fileFilter: (_, file, cb) => {
-    const allowedExt = ['.jpg', '.jpeg', '.png', '.gif'];
+    const allowedExt = ConfigSingleton.allowedExtensions; //cambie esto
     const ext = path.extname(file.originalname).toLowerCase();
     const mimetypeOK = file.mimetype.startsWith('image/');
 

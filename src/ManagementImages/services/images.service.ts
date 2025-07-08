@@ -14,7 +14,8 @@ export const saveImage = (file: Express.Multer.File): Image => {
     size: file.size,
   };
 
-  fs.writeFileSync(image.path, file.buffer);
+  
+  fs.copyFileSync(file.path, image.path);
   images.push(image);
   return image;
 };

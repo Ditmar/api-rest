@@ -14,12 +14,17 @@ class ConfigSingleton {
         MONGO_HOST: string;
         MONGO_DATABASE: string;
         MONGO_PORT: number;
+<<<<<<< HEAD
         JWT_SECRET: string;
         JWT_TTL: number;
         JWT_REFRESH_TTL: number;
         JWT_ALGORITHM: 'HS256' | 'RS256';
         JWT_ISSUER: string;
         JWT_AUDIENCE: string;
+=======
+        MAX_IMAGE_SIZE_MB: number; 
+        ALLOWED_EXTENSIONS: string; // aumente etso
+>>>>>>> dddd0dc (feat:remodeling in my working file)
 
     } | null = null;
     private static createSchema() {
@@ -35,12 +40,17 @@ class ConfigSingleton {
             MONGO_HOST: z.string(),
             MONGO_DATABASE: z.string(),
             MONGO_PORT: z.coerce.number().default(27017),
+<<<<<<< HEAD
             JWT_SECRET: z.string().min(30),
             JWT_TTL: z.coerce.number(),
             JWT_REFRESH_TTL: z.coerce.number(),
             JWT_ALGORITHM: z.enum(['HS256', 'RS256']),
             JWT_ISSUER: z.string().min(1),
             JWT_AUDIENCE: z.string().min(1),
+=======
+            MAX_IMAGE_SIZE_MB: z.coerce.number().default(5),
+             ALLOWED_EXTENSIONS: z.string().default('.jpg,.jpeg,.png,.gif'),//y etso
+>>>>>>> dddd0dc (feat:remodeling in my working file)
         });
 
         const parsed = configSchema.safeParse(process.env);
@@ -60,6 +70,15 @@ class ConfigSingleton {
         }
 
         return ConfigSingleton.env;
+    }
+     // Getter adicional para obtener el tamaño en bytes
+    public static get maxImageSizeBytes(): number {
+        return this.getInstance().MAX_IMAGE_SIZE_MB * 1024 * 1024;
+    }
+    // Getter para obtener el array de extensiones permitidas
+    public static get allowedExtensions(): string[] {
+        const raw = this.getInstance().ALLOWED_EXTENSIONS;
+        return raw.split(',').map(ext => ext.trim().toLowerCase());
     }
 }
 export { ConfigSingleton };
