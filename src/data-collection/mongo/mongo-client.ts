@@ -31,10 +31,20 @@ export class MongoClient{
         }
     }
     public static async disconnection() {
-        try {
-            await MongoClient.instance?.close();
-        } catch (error) {
-            console.error('Error on disconnection', error);
-        }
+  if (!MongoClient.instance) {
+    console.warn('⚠️ No Mongo instance to disconnect.');
+    return;
+  }
+try {
+    await MongoClient.instance.close();
+    console.log('✅ Mongo disconnected successfully');
+  } catch (error) {
+    const err = error as Error;
+    if (err.name === 'MongoTopologyClosedError') {
+      console.warn('⚠️ Mongo connection already closed.');
+    } else {
+      console.error('❌ Error on disconnection:', err.message);
     }
+  }
+}
 }

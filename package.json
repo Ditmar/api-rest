@@ -1,15 +1,16 @@
 {
   "name": "api-rest",
-  "version": "1.0.6-rc.65",
+  "version": "1.0.6-rc.67",
   "description": "",
   "scripts": {
     "build": "tsc",
     "start": "yarn build && node ./dist/App.js",
     "dev": "nodemon",
     "lint": "eslint src/**/*.ts",
-    "test": "vitest run",
+    "test:postgres": "node sync-env-vars.js && cross-env NODE_ENV=test vitest run --testNamePattern=Postgres",
     "db:start:local": "docker-compose -f ./dev-database/dev-database.yml up -d",
-    "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up"
+    "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up",
+    "test": "vitest --config vitest.config.ts "
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
     "multer": "^2.0.1",
+    "sequelize": "^6.37.7",
     "zod": "^3.24.4"
   },
   "engines": {
@@ -32,16 +34,20 @@
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/multer": "^1.4.13",
     "@types/mongoose": "^5.11.97",
+    "@types/multer": "^1.4.13",
+    "@types/sequelize": "^4.28.20",
     "eslint": "^9.26.0",
     "globals": "^16.1.0",
     "mongodb-memory-server": "^10.1.4",
     "mongoose": "^8.16.2",
     "nodemon": "^3.1.10",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
     "tsc": "^2.0.4",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0",
-    "vitest": "3.2.4"
+    "vitest": "^3.2.4"
   }
 }

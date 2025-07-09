@@ -13,6 +13,7 @@ vi.mock('@sequelize/core', () => {
   };
 });
 
+
 vi.mock('@sequelize/postgres', () => ({
   PostgresDialect: vi.fn(),
 }));
