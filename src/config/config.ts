@@ -20,6 +20,8 @@ class ConfigSingleton {
         JWT_ALGORITHM: 'HS256' | 'RS256';
         JWT_ISSUER: string;
         JWT_AUDIENCE: string;
+        MAX_IMAGE_SIZE_MB: number; 
+        ALLOWED_EXTENSIONS: string; 
 
     } | null = null;
     private static createSchema() {
@@ -41,14 +43,16 @@ class ConfigSingleton {
             JWT_ALGORITHM: z.enum(['HS256', 'RS256']),
             JWT_ISSUER: z.string().min(1),
             JWT_AUDIENCE: z.string().min(1),
-        });
+            MAX_IMAGE_SIZE_MB: z.coerce.number().default(5),
+            ALLOWED_EXTENSIONS: z.string().default('.jpg,.jpeg,.png,.gif'), 
 
-        const parsed = configSchema.safeParse(process.env);
-        if (!parsed.success) {
-            console.error('Invalid environment variables:', parsed.error.format());
-            process.exit(1);
-        }
-        const env = parsed.data;
+});
+          const parsed = configSchema.safeParse(process.env);
+          if (!parsed.success) {
+              console.error('Invalid environment variables:', parsed.error.format());
+              process.exit(1);
+          }
+          const env = parsed.data;
         return env;
     };
 
@@ -60,6 +64,15 @@ class ConfigSingleton {
         }
 
         return ConfigSingleton.env;
+    }
+     
+    public static get maxImageSizeBytes(): number {
+        return this.getInstance().MAX_IMAGE_SIZE_MB * 1024 * 1024;
+    }
+    
+    public static get allowedExtensions(): string[] {
+        const raw = this.getInstance().ALLOWED_EXTENSIONS;
+        return raw.split(',').map(ext => ext.trim().toLowerCase());
     }
 }
 export { ConfigSingleton };
