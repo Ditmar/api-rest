@@ -10,8 +10,7 @@
     "test:postgres": "node sync-env-vars.js && cross-env NODE_ENV=test vitest run --testNamePattern=Postgres",
     "db:start:local": "docker-compose -f ./dev-database/dev-database.yml up -d",
     "db:start:local:log": "docker-compose -f ./dev-database/dev-database.yml up",
-    "test": "yarn prepare-test-db && vitest --config vitest.config.ts ",
-    "prepare-test-db": "node scripts/prepare-test-db.js"
+    "test": "vitest --config vitest.config.ts "
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
     "multer": "^2.0.1",
+    "sequelize": "^6.37.7",
     "zod": "^3.24.4"
   },
   "engines": {
@@ -34,8 +34,9 @@
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/multer": "^1.4.13",
     "@types/mongoose": "^5.11.97",
+    "@types/multer": "^1.4.13",
+    "@types/sequelize": "^4.28.20",
     "eslint": "^9.26.0",
     "globals": "^16.1.0",
     "mongodb-memory-server": "^10.1.4",
