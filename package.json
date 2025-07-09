@@ -1,6 +1,6 @@
 {
   "name": "api-rest",
-  "version": "1.0.6-rc.65",
+  "version": "1.0.6-rc.67",
   "description": "",
   "scripts": {
     "build": "tsc",
